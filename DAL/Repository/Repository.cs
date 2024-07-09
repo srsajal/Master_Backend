@@ -1,0 +1,155 @@
+﻿using master.DAL.Entity;
+using master.DAL.IRepository;
+using master.Dto;
+using masterDDO.Helpers;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+
+namespace master.DAL.Repository
+{
+    public class Repository<T, Tcontext> : IRepository<T> where T : class where Tcontext : DbContext
+    {
+        public readonly Tcontext _masterDdoContext;
+        protected Repository(Tcontext context)
+        {
+            this._masterDdoContext = context;
+        }
+        public async Task<List<T>> get()
+        {
+            try
+            {
+                return await _masterDdoContext.Set<T>().ToListAsync();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public async Task<T> GetByIdAsync(int id)
+        {
+            try
+            {
+                return await _masterDdoContext.Set<T>().FindAsync(id);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public bool add(T entity)
+        {
+            try
+            {
+                this._masterDdoContext.Set<T>().Add(entity);
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public bool update(T entity)
+        {
+            this._masterDdoContext.Entry(entity).State = EntityState.Modified;
+            return true;
+        }
+        public void Detach(T entity)
+        {
+            var entry = _masterDdoContext.Entry(entity);
+            if (entry != null)
+            {
+                entry.State = EntityState.Detached;
+            }
+        }
+        public bool delete(T entity)
+        {
+            try
+            {
+                this._masterDdoContext.Set<T>().Remove(entity);
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public void saveChangesManage()
+        {
+            try
+            {
+                this._masterDdoContext.SaveChanges();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public async Task saveChangesAsync()
+        {
+            try
+            {
+                await this._masterDdoContext.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<ICollection<TResult>> GetSelectedColumnByConditionAsync<TResult>(
+            Expression<Func<T, TResult>> selectExpression,
+            int pageIndex = 0,
+            int pageSize = 10,
+            List<FilterParameter> dynamicFilters = null,
+            string orderByField = null,
+            string orderByOrder = null
+        )
+        {
+            if (pageSize <= 0)
+                throw new ArgumentException("pageSize is less or equal to ZERO");
+            IQueryable<T> query = this._masterDdoContext.Set<T>();
+
+            if (dynamicFilters != null && dynamicFilters.Any())
+            {
+                foreach (var filter in dynamicFilters)
+                {
+                    var dynimicFilterExpression = ExpressionHelper.GetFilterExpression<T>(filter.Field, filter.Value, filter.Operator);
+                    query = query.Where(dynimicFilterExpression);
+                }
+            }
+            // Dynamic order by expression
+            if (!string.IsNullOrWhiteSpace(orderByField))
+            {
+                var parameter = Expression.Parameter(typeof(T), "x");
+                var property = Expression.Property(parameter, orderByField);
+                var lambda = Expression.Lambda<Func<T, object>>(Expression.Convert(property, typeof(object)), parameter);
+
+                if (orderByOrder == "ASC")
+                {
+                    query = query.OrderBy(lambda);
+                }
+                else
+                {
+                    query = query.OrderByDescending(lambda);
+                }
+            }
+            var result = await query.Select(selectExpression).Skip(pageIndex).Take(pageSize).ToListAsync();
+            return result;
+        }
+        public int CountWithCondition(Expression<Func<T, bool>> condition, List<FilterParameter> dynamicFilters = null)
+        {
+            IQueryable<T> query = this._masterDdoContext.Set<T>();
+
+            if (dynamicFilters != null && dynamicFilters.Any())
+            {
+                foreach (var filter in dynamicFilters)
+                {
+                    var dynimicFilterExpression = ExpressionHelper.GetFilterExpression<T>(filter.Field, filter.Value, filter.Operator);
+                    query = query.Where(dynimicFilterExpression);
+                }
+            }
+            //var result = query.Select(selectExpression).ToListAsync();
+            return query.Count(condition);
+        }
+    }
+}
