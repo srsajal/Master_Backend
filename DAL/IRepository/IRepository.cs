@@ -7,7 +7,7 @@ namespace master.DAL.IRepository
     public interface IRepository<T> where T : class
     {
         Task<List<T>> get();
-        Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync<TKey>(TKey id);
         //Task<T> get(int id);
         bool add(T entity);
         bool update(T entity);
