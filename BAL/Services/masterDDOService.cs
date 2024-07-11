@@ -22,34 +22,27 @@ namespace master.BAL.Services
 
         public async Task<IEnumerable<masterDDODto>> getmasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
         {
-            try
+            string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
+            string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
+            IEnumerable<masterDDODto> StudentFormSajalResult = await _masterDDORepository.GetSelectedColumnByConditionAsync(entity => new masterDDODto
             {
-                string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
-                string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-                IEnumerable<masterDDODto> StudentFormSajalResult = await _masterDDORepository.GetSelectedColumnByConditionAsync(entity => new masterDDODto
-                {
-                    Id = entity.Id,
-                    TreasuryCode = entity.TreasuryCode,
-                    TreasuryMstld = entity.TreasuryMstId,
-                    Code = entity.Code,
-                    Designation = entity.Designation,
-                    DesignationMstld = entity.DesignationMstId,
-                    Address = entity.Address,
-                    Phone = entity.Phone
-                },
-                dynamicListQueryParameters.PageIndex,
-                dynamicListQueryParameters.PageSize,
-                dynamicListQueryParameters.filterParameters,
-                sortField,
-                sortOrder
+                Id = entity.Id,
+                TreasuryCode = entity.TreasuryCode,
+                TreasuryMstld = entity.TreasuryMstId,
+                Code = entity.Code,
+                Designation = entity.Designation,
+                DesignationMstld = entity.DesignationMstId,
+                Address = entity.Address,
+                Phone = entity.Phone
+            },
+            dynamicListQueryParameters.PageIndex,
+            dynamicListQueryParameters.PageSize,
+            dynamicListQueryParameters.filterParameters,
+            sortField,
+            sortOrder
 
-                );
-                return StudentFormSajalResult;
-            }
-            catch
-            {
-                throw;
-            }
+            );
+            return StudentFormSajalResult;
         }
         /*public async Task<List<Ddo>> getstudents()
         {
@@ -64,20 +57,15 @@ namespace master.BAL.Services
         }*/
         public async Task<int> addStudent(masterDDOModel s)
         {
-            try
-            {
-                Ddo? newDdo = new Ddo();
-                newDdo = _mapper.Map<Ddo>(s);
-                _masterDDORepository.add(newDdo);
-                _masterDDORepository.saveChangesManage();
+            Ddo? newDdo = new Ddo();
+            newDdo = _mapper.Map<Ddo>(s);
+            _masterDDORepository.add(newDdo);
+            _masterDDORepository.saveChangesManage();
 
 
-                return newDdo.Id;
-            }
-            catch
-            {
-                throw;
-            }
+            return newDdo.Id;
+           
+
         }
         public async Task<bool> updateStudent(int id, masterDDOModel s)
         {

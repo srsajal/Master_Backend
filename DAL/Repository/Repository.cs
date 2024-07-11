@@ -16,37 +16,15 @@ namespace master.DAL.Repository
         }
         public async Task<List<T>> get()
         {
-            try
-            {
-                return await _masterDdoContext.Set<T>().ToListAsync();
-            }
-            catch
-            {
-                throw;
-            }
-        }
+            return await _masterDdoContext.Set<T>().ToListAsync();        }
         public async Task<T> GetByIdAsync<TKey>(TKey id)
         {
-            try
-            {
-                return await _masterDdoContext.Set<T>().FindAsync(id);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _masterDdoContext.Set<T>().FindAsync(id);
         }
         public bool add(T entity)
         {
-            try
-            {
-                this._masterDdoContext.Set<T>().Add(entity);
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
+            this._masterDdoContext.Set<T>().Add(entity);
+            return true;
         }
         public bool update(T entity)
         {
@@ -63,37 +41,16 @@ namespace master.DAL.Repository
         }
         public bool delete(T entity)
         {
-            try
-            {
-                this._masterDdoContext.Set<T>().Remove(entity);
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
+            this._masterDdoContext.Set<T>().Remove(entity);
+            return true;
         }
         public void saveChangesManage()
         {
-            try
-            {
-                this._masterDdoContext.SaveChanges();
-            }
-            catch
-            {
-                throw;
-            }
+            this._masterDdoContext.SaveChanges();
         }
         public async Task saveChangesAsync()
         {
-            try
-            {
-                await this._masterDdoContext.SaveChangesAsync();
-            }
-            catch
-            {
-                throw;
-            }
+            await this._masterDdoContext.SaveChangesAsync();
         }
 
         public async Task<ICollection<TResult>> GetSelectedColumnByConditionAsync<TResult>(
