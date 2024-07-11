@@ -20,9 +20,12 @@ builder.Services.AddSwaggerGen();
 // Repositories
 builder.Services.AddScoped<IRepository<Ddo>, masterDDORepostiory>();
 builder.Services.AddTransient<ImasterDDORepository, masterDDORepostiory>();
+builder.Services.AddScoped<IRepository<Department>, masterDepartmentRepository>();
+builder.Services.AddTransient<ImasterDepartmentRepository, masterDepartmentRepository>();
 
 // Services
 builder.Services.AddTransient<ImasterDDOService, masterDDOService>();
+builder.Services.AddTransient<ImasterDepartmentService, masterDepartmentService>();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
