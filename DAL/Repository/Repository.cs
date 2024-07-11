@@ -25,7 +25,7 @@ namespace master.DAL.Repository
                 throw;
             }
         }
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync<TKey>(TKey id)
         {
             try
             {
