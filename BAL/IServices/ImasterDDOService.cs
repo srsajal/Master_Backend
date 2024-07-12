@@ -9,11 +9,13 @@ namespace master.BAL.IServices
     {
 
         // Task<List<Ddo>> getstudents();
+        
         Task<int> addStudent(masterDDOModel s);
         Task<bool> updateStudent(int id, masterDDOModel s);
         Task<bool> deleteStudent(int studentId);
         Task<Ddo> getStudentById(int id);
         Task<IEnumerable<masterDDODto>> getmasterDDO(DynamicListQueryParameters dynamicListQueryParameters);
+        Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode();
         //int CountWithCondition(List<FilterParameter> dynamicFilters);
         Task<int> CountMasterDDO(DynamicListQueryParameters dynamicListQueryParameters);
     }

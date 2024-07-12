@@ -13,11 +13,13 @@ namespace master.BAL.Services
     public class masterDDOService : ImasterDDOService
     {
         ImasterDDORepository _masterDDORepository;
+        ImasterTreasuryRepository _masterTreasuryRepository;
         IMapper _mapper;
-        public masterDDOService(IMapper mapper, ImasterDDORepository masterDDORepository)
+        public masterDDOService(IMapper mapper, ImasterDDORepository masterDDORepository, ImasterTreasuryRepository masterTreasuryRepository)
         {
             _mapper = mapper;
             _masterDDORepository = masterDDORepository;
+            _masterTreasuryRepository = masterTreasuryRepository;
         }
 
         public async Task<IEnumerable<masterDDODto>> getmasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
@@ -44,6 +46,14 @@ namespace master.BAL.Services
             );
             return StudentFormSajalResult;
         }
+        public async Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode()
+        {
+            IEnumerable<DdoCodeTresuryDTO> StudentFormSajalResult = await _masterTreasuryRepository.GetSelectedColumnAsync(entity => new DdoCodeTresuryDTO
+            {
+                Code = entity.Code
+            });
+            return StudentFormSajalResult;
+        }
         /*public async Task<List<Ddo>> getstudents()
         {
             try
@@ -55,6 +65,12 @@ namespace master.BAL.Services
                 throw;
             }
         }*/
+
+        //public async Task<List<DdoCodeTresuryDTO> getTreasuryCodes()
+        //{
+
+        //}
+
         public async Task<int> addStudent(masterDDOModel s)
         {
             Ddo? newDdo = new Ddo();
