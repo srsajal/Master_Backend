@@ -23,6 +23,7 @@ namespace master.DAL.IRepository
             string orderByField = null,
             string orderByOrder = null
         );
+        Task<ICollection<TResult>> GetSelectedColumnAsync<TResult>(Expression<Func<T, TResult>> selectExpression);
         int CountWithCondition(Expression<Func<T, bool>> condition, List<FilterParameter> dynamicFilters = null);
     }
 }

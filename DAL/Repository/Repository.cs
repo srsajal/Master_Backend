@@ -93,6 +93,15 @@ namespace master.DAL.Repository
             var result = await query.Select(selectExpression).Skip(pageIndex).Take(pageSize).ToListAsync();
             return result;
         }
+
+        public async Task<ICollection<TResult>> GetSelectedColumnAsync<TResult>( Expression<Func<T, TResult>> selectExpression)
+        {
+           
+            IQueryable<T> query = this._masterDdoContext.Set<T>();
+            var result = await query.Select(selectExpression).ToListAsync();
+            return result;
+        }
+
         public int CountWithCondition(Expression<Func<T, bool>> condition, List<FilterParameter> dynamicFilters = null)
         {
             IQueryable<T> query = this._masterDdoContext.Set<T>();
