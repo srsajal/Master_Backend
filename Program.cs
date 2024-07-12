@@ -24,11 +24,15 @@ builder.Services.AddScoped<IRepository<Department>, masterDepartmentRepository>(
 builder.Services.AddTransient<ImasterDepartmentRepository, masterDepartmentRepository>();
 builder.Services.AddScoped<IRepository<Treasury>, masterTreasuryRepository>();
 builder.Services.AddTransient<ImasterTreasuryRepository, masterTreasuryRepository>();
+builder.Services.AddTransient<ImasterSCHEME_HEADRepository, masterSCHEME_HEADRepository>();
+builder.Services.AddScoped<ImasterSCHEME_HEADRepository, masterSCHEME_HEADRepository>();
 
 // Services
 builder.Services.AddTransient<ImasterDDOService, masterDDOService>();
 builder.Services.AddTransient<ImasterDepartmentService, masterDepartmentService>();
 builder.Services.AddTransient<ImasterTreasuryService, masterTreasuryService>();
+builder.Services.AddTransient<ImasterSCHEME_HEADService, masterSCHEME_HEADService>();
+
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
