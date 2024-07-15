@@ -10,7 +10,8 @@ namespace master.Helpers
         public MappingConfig()
         {
             CreateMap<masterDDOModel, Ddo>().ReverseMap();
-            CreateMap<masterDepartmentModel, Department>().ReverseMap();
+            CreateMap<masterSCHEME_HEADModel, SchemeHead>().ReverseMap();
+
         }
     }
 }
