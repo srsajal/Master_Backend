@@ -30,10 +30,10 @@ namespace master.BAL.Services
             {
                 Id = entity.Id,
                 TreasuryCode = entity.TreasuryCode,
-                TreasuryMstld = entity.TreasuryMstId,
+                //TreasuryMstld = entity.TreasuryMstId,
                 Code = entity.Code,
                 Designation = entity.Designation,
-                DesignationMstld = entity.DesignationMstId,
+                //DesignationMstld = entity.DesignationMstId,
                 Address = entity.Address,
                 Phone = entity.Phone
             },
@@ -50,7 +50,8 @@ namespace master.BAL.Services
         {
             IEnumerable<DdoCodeTresuryDTO> StudentFormSajalResult = await _masterTreasuryRepository.GetSelectedColumnAsync(entity => new DdoCodeTresuryDTO
             {
-                Code = entity.Code
+                Code = entity.Code,
+                Name = entity.Name
             });
             return StudentFormSajalResult;
         }
@@ -118,9 +119,21 @@ namespace master.BAL.Services
             }
             return true;
         }
-        public async Task<Ddo> getStudentById(int id)
+        public async Task<masterDDODto> getStudentById(int id)
         {
-            return (await _masterDDORepository.GetByIdAsync(id));
+            //return (await _masterDDORepository.GetByIdAsync(id));
+            masterDDODto StudentFormSajalResult = await _masterDDORepository.GetSelectedIdColumnAsync(id, entity => new masterDDODto
+            {
+                Id = entity.Id,
+                TreasuryCode = entity.TreasuryCode,
+                //TreasuryMstld = entity.TreasuryMstId,
+                Code = entity.Code,
+                Designation = entity.Designation,
+                //DesignationMstld = entity.DesignationMstId,
+                Address = entity.Address,
+                Phone = entity.Phone
+            });
+            return StudentFormSajalResult;
         }
         /*public async Task<List<Ddo>> getStudentsByName(String name)
         {
