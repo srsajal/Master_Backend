@@ -14,7 +14,7 @@ namespace master.Helpers
             CreateMap<masterSCHEME_HEADModel, SchemeHead>().ReverseMap();
             CreateMap<masterDepartmentModel, Department>().ReverseMap();
             CreateMap<MasterManegmentModel, MajorHead>().ReverseMap();
-            
+            CreateMap<masterTreasuryModel, Treasury>().ReverseMap();
 
         }
     }
