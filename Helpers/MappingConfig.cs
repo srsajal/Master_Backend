@@ -12,11 +12,10 @@ namespace master.Helpers
         {
             CreateMap<masterDDOModel, Ddo>().ReverseMap();
             CreateMap<masterSCHEME_HEADModel, SchemeHead>().ReverseMap();
-<<<<<<< Updated upstream
+
             CreateMap<masterDepartmentModel, Department>().ReverseMap();
             CreateMap<MasterManegmentModel, MajorHead>().ReverseMap();
-=======
->>>>>>> Stashed changes
+
             CreateMap<masterTreasuryModel, Treasury>().ReverseMap();
 
         }
