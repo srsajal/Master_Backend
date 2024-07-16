@@ -82,7 +82,7 @@ namespace MasterManegmentSystem.Controllers
         {
             try
             {
-                int id = await _imasterDDOService.AddMasterSubmajorhead(s);
+                int id = await _imasterDDOService.AddMasterMAJORHEAD(s);
                 return Ok(id);
             }
             catch (Exception ex)

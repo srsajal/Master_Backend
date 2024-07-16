@@ -48,12 +48,12 @@ namespace MasterManegmentSystem.BAL.Services
             }
         }
 
-       public async Task<int> AddMasterSubmajorhead(MasterManegmentModel model)
+       public async Task<int> AddMasterMAJORHEAD(MasterManegmentModel model)
         {
             try
             {
                 MajorHead newMajorHead = _mapper.Map<MajorHead>(model);
-               /* await _masterManegmentRepository.add(newMajorHead);*/
+                _masterManegmentRepository.add(newMajorHead);
                 await _masterManegmentRepository.saveChangesAsync();
 
                 return newMajorHead.Id;
