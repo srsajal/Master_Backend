@@ -20,7 +20,7 @@ namespace MasterManegmentSystem.BAL.Services
             _masterManegmentRepository = masterManegmentRepository;
         }
 
-        public async Task<IEnumerable<MasterManegmentDTO>> GetMasterMAJORHEAD(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<MasterManegmentDTO>> GetMasterSubmajorhead(DynamicListQueryParameters dynamicListQueryParameters)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace MasterManegmentSystem.BAL.Services
             }
         }
 
-       public async Task<int> AddMasterMAJORHEAD(MasterManegmentModel model)
+       public async Task<int> AddMasterSubmajorhead(MasterManegmentModel model)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace MasterManegmentSystem.BAL.Services
             }
         }
 
-        public async Task<bool> UpdateMasterMAJORHEAD(short id, MasterManegmentModel model)
+        public async Task<bool> UpdateMasterSubmajorhead(short id, MasterManegmentModel model)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace MasterManegmentSystem.BAL.Services
             }
         }
 
-        public async Task<bool> DeleteMasterMAJORHEAD(short id)
+        public async Task<bool> DeleteMasterSubmajorhead(short id)
         {
             try
             {
@@ -114,7 +114,7 @@ namespace MasterManegmentSystem.BAL.Services
             return _masterManegmentRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
         }
 
-        public Task<MajorHead> GetMasterMAJORHEADById(short id)
+        public Task<MajorHead> GetMasterSubmajorheadById(short id)
         {
             return  _masterManegmentRepository.GetByIdAsync(id);
         }

@@ -8,12 +8,12 @@ namespace MasterManegmentSystem.BAL.IServices
 {
     public interface IMasterManegmentService
     {
-        Task<IEnumerable<MasterManegmentDTO>> GetMasterMAJORHEAD(DynamicListQueryParameters dynamicListQueryParameters);
-          Task<int> AddMasterMAJORHEAD(MasterManegmentModel model);
-           Task<bool> UpdateMasterMAJORHEAD(short id, MasterManegmentModel model);
-           Task<bool> DeleteMasterMAJORHEAD(short id);
+        Task<IEnumerable<MasterManegmentDTO>> GetMasterSubmajorhead(DynamicListQueryParameters dynamicListQueryParameters);
+          Task<int> AddMasterSubmajorhead(MasterManegmentModel model);
+           Task<bool> UpdateMasterSubmajorhead(short id, MasterManegmentModel model);
+           Task<bool> DeleteMasterSubmajorhead(short id);
         /* Task<List<MajorHead>> GetMasterMAJORHEADName(string name);*/
-        Task<MajorHead> GetMasterMAJORHEADById(short id);
+        Task<MajorHead> GetMasterSubmajorheadById(short id);
         Task<int> CountMasterDDO(DynamicListQueryParameters dynamicListQueryParameters);
        
     }

@@ -49,7 +49,7 @@ namespace MasterManegmentSystem.Controllers
                     },
                     
                 },
-                    Data = await _imasterDDOService.GetMasterMAJORHEAD(dynamicListQueryParameters),
+                    Data = await _imasterDDOService.GetMasterSubmajorhead(dynamicListQueryParameters),
                     DataCount = await _imasterDDOService.CountMasterDDO(dynamicListQueryParameters)
                 };
                 response.result = result;
@@ -67,7 +67,7 @@ namespace MasterManegmentSystem.Controllers
         {
             try
             {
-                var student = await _imasterDDOService.GetMasterMAJORHEADById(id);
+                var student = await _imasterDDOService.GetMasterSubmajorheadById(id);
                 return Ok(student);
             }
             catch (Exception ex)
@@ -82,7 +82,7 @@ namespace MasterManegmentSystem.Controllers
         {
             try
             {
-                int id = await _imasterDDOService.AddMasterMAJORHEAD(s);
+                int id = await _imasterDDOService.AddMasterSubmajorhead(s);
                 return Ok(id);
             }
             catch (Exception ex)
@@ -95,7 +95,7 @@ namespace MasterManegmentSystem.Controllers
         {
             try
             {
-                await _imasterDDOService.UpdateMasterMAJORHEAD(id, s);
+                await _imasterDDOService.UpdateMasterSubmajorhead(id, s);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)
@@ -113,7 +113,7 @@ namespace MasterManegmentSystem.Controllers
         {
             try
             {
-                await _imasterDDOService.DeleteMasterMAJORHEAD(id);
+                await _imasterDDOService.DeleteMasterSubmajorhead(id);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)
