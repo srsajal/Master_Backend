@@ -1,4 +1,5 @@
 ﻿using master.BAL.IServices;
+using master.BAL.Services;
 using master.Dto;
 using master.Models;
 using masterDDO.Enums;
@@ -93,6 +94,21 @@ namespace master.Controllers
                 response.apiResponseStatus = APIResponseStatus.Error;
             }
             return Ok(response);
+        }
+
+        [HttpGet("GetTreasuryCode")]
+        public async Task<IActionResult> GetTreasuryCodes()
+        {
+            try
+            {
+                var codes = await _imasterSCHEMEHEADService.getTreasuryCode();
+                return Ok(codes);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
         }
 
         [HttpGet("GetMasterSCHEME_HEADById")]
