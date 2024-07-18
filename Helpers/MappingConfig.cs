@@ -11,9 +11,14 @@ namespace master.Helpers
         public MappingConfig()
         {
             CreateMap<masterDDOModel, Ddo>().ReverseMap();
+            CreateMap<masterDetailHeadModel, DetailHead>().ReverseMap();
+            CreateMap<masterSubDetailHeadModel, SubDetailHead>().ReverseMap();
+
+
             CreateMap<masterSCHEME_HEADModel, SchemeHead>().ReverseMap();
 
             CreateMap<masterDepartmentModel, Department>().ReverseMap();
+            CreateMap<masterMinorHeadModel, MinorHead>().ReverseMap();
             CreateMap<MasterManegmentModel, MajorHead>().ReverseMap();
 
             CreateMap<masterTreasuryModel, Treasury>().ReverseMap();
