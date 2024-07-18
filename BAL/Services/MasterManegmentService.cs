@@ -36,7 +36,7 @@ namespace MasterManegmentSystem.BAL.Services
                     dynamicListQueryParameters.filterParameters,
                     sortField,
                     sortOrder);
-
+            
                 return result;
         }
 
