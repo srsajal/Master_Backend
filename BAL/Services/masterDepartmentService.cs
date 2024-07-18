@@ -19,7 +19,7 @@ namespace master.BAL.Services
         }
         public async Task<IEnumerable<masterDepartmentDto>> getmasterDepartment(DynamicListQueryParameters dynamicListQueryParameters)
         {
-            string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
+            string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "DESC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
             IEnumerable<masterDepartmentDto> masterdept = await _masterDepartmentRepository.GetSelectedColumnByConditionAsync(entity => new masterDepartmentDto
             {

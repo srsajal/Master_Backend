@@ -12,7 +12,7 @@ namespace master.Helpers
             CreateMap<masterDDOModel, Ddo>().ReverseMap();
             CreateMap<masterSCHEME_HEADModel, SchemeHead>().ReverseMap();
             CreateMap<masterDepartmentModel, Department>().ReverseMap();
-
+            CreateMap<masterMinorHeadModel, MinorHead>().ReverseMap();
         }
     }
 }
