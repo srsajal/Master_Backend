@@ -35,6 +35,8 @@ builder.Services.AddTransient<IRepository<SchemeHead>, masterSCHEME_HEADReposito
 builder.Services.AddScoped<ImasterSCHEME_HEADRepository, masterSCHEME_HEADRepository>();
 builder.Services.AddTransient<IRepository<MajorHead>, MasterMamegmentRepository>();
 builder.Services.AddScoped<IMasterManegmentRepository, MasterMamegmentRepository>();
+builder.Services.AddTransient<IRepository<MinorHead>, masterMinorHeadRepository>();
+builder.Services.AddScoped<ImasterMinorHeadRepository, masterMinorHeadRepository>();
 
 // Services
 builder.Services.AddTransient<ImasterDDOService, masterDDOService>();
@@ -43,7 +45,7 @@ builder.Services.AddTransient<ImasterDepartmentService, masterDepartmentService>
 builder.Services.AddTransient<ImasterTreasuryService, masterTreasuryService>();
 builder.Services.AddTransient<ImasterSCHEME_HEADService, masterSCHEME_HEADService>();
 builder.Services.AddTransient<IMasterManegmentService, MasterManegmentService>();
-
+builder.Services.AddTransient<ImasterMinorHeadService, masterMinorHeadService>();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
