@@ -26,6 +26,8 @@ builder.Services.AddScoped<IRepository<Ddo>, masterDDORepostiory>();
 builder.Services.AddTransient<ImasterDDORepository, masterDDORepostiory>();
 builder.Services.AddScoped<IRepository<DetailHead>, masterDetailHeadRepository>();
 builder.Services.AddTransient<ImasterDetailHeadRepository, masterDetailHeadRepository>();
+builder.Services.AddScoped<IRepository<SubDetailHead>, masterSubDetailHeadRepository>();
+builder.Services.AddTransient<ImasterSubDetailHeadRepository, masterSubDetailHeadRepository>();
 
 builder.Services.AddScoped<IRepository<Department>, masterDepartmentRepository>();
 builder.Services.AddTransient<ImasterDepartmentRepository, masterDepartmentRepository>();
@@ -41,6 +43,7 @@ builder.Services.AddScoped<ImasterMinorHeadRepository, masterMinorHeadRepository
 // Services
 builder.Services.AddTransient<ImasterDDOService, masterDDOService>();
 builder.Services.AddTransient<ImasterDetailHeadService, masterDetailHeadService>();
+builder.Services.AddTransient<ImasterSubDetailHeadService, masterSubDetailHeadService>();
 builder.Services.AddTransient<ImasterDepartmentService, masterDepartmentService>();
 builder.Services.AddTransient<ImasterTreasuryService, masterTreasuryService>();
 builder.Services.AddTransient<ImasterSCHEME_HEADService, masterSCHEME_HEADService>();
