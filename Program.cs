@@ -24,6 +24,9 @@ builder.Services.AddSwaggerGen();
 // Repositories
 builder.Services.AddScoped<IRepository<Ddo>, masterDDORepostiory>();
 builder.Services.AddTransient<ImasterDDORepository, masterDDORepostiory>();
+builder.Services.AddScoped<IRepository<DetailHead>, masterDetailHeadRepository>();
+builder.Services.AddTransient<ImasterDetailHeadRepository, masterDetailHeadRepository>();
+
 builder.Services.AddScoped<IRepository<Department>, masterDepartmentRepository>();
 builder.Services.AddTransient<ImasterDepartmentRepository, masterDepartmentRepository>();
 builder.Services.AddScoped<IRepository<Treasury>, masterTreasuryRepository>();
@@ -35,6 +38,7 @@ builder.Services.AddScoped<IMasterManegmentRepository, MasterMamegmentRepository
 
 // Services
 builder.Services.AddTransient<ImasterDDOService, masterDDOService>();
+builder.Services.AddTransient<ImasterDetailHeadService, masterDetailHeadService>();
 builder.Services.AddTransient<ImasterDepartmentService, masterDepartmentService>();
 builder.Services.AddTransient<ImasterTreasuryService, masterTreasuryService>();
 builder.Services.AddTransient<ImasterSCHEME_HEADService, masterSCHEME_HEADService>();
