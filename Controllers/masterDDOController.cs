@@ -60,7 +60,7 @@ namespace master.Controllers
                     },
                     new ListHeader
                     {
-                        Name="Code",
+                        Name="DDO Code",
                         DataType="text",
                         FieldName ="code",
                         FilterField ="Code",
@@ -115,6 +115,21 @@ namespace master.Controllers
             {
                 var student = await _imasterDDOService.getStudentById(id);
                 return Ok(student);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+        }
+
+        [HttpGet("GetTreasuryCode")]
+        public async Task<IActionResult> GetTreasuryCodes()
+        {
+            try
+            {
+                var codes = await _imasterDDOService.getTreasuryCode();
+                return Ok(codes);
             }
             catch (Exception ex)
             {

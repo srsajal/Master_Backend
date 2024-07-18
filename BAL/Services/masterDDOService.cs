@@ -13,11 +13,13 @@ namespace master.BAL.Services
     public class masterDDOService : ImasterDDOService
     {
         ImasterDDORepository _masterDDORepository;
+        ImasterTreasuryRepository _masterTreasuryRepository;
         IMapper _mapper;
-        public masterDDOService(IMapper mapper, ImasterDDORepository masterDDORepository)
+        public masterDDOService(IMapper mapper, ImasterDDORepository masterDDORepository, ImasterTreasuryRepository masterTreasuryRepository)
         {
             _mapper = mapper;
             _masterDDORepository = masterDDORepository;
+            _masterTreasuryRepository = masterTreasuryRepository;
         }
 
         public async Task<IEnumerable<masterDDODto>> getmasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
@@ -28,10 +30,10 @@ namespace master.BAL.Services
             {
                 Id = entity.Id,
                 TreasuryCode = entity.TreasuryCode,
-                TreasuryMstld = entity.TreasuryMstId,
+                //TreasuryMstld = entity.TreasuryMstId,
                 Code = entity.Code,
                 Designation = entity.Designation,
-                DesignationMstld = entity.DesignationMstId,
+                //DesignationMstld = entity.DesignationMstId,
                 Address = entity.Address,
                 Phone = entity.Phone
             },
@@ -42,6 +44,15 @@ namespace master.BAL.Services
             sortOrder
 
             );
+            return StudentFormSajalResult;
+        }
+        public async Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode()
+        {
+            IEnumerable<DdoCodeTresuryDTO> StudentFormSajalResult = await _masterTreasuryRepository.GetSelectedColumnAsync(entity => new DdoCodeTresuryDTO
+            {
+                Code = entity.Code,
+                Name = entity.Name
+            });
             return StudentFormSajalResult;
         }
         /*public async Task<List<Ddo>> getstudents()
@@ -55,6 +66,12 @@ namespace master.BAL.Services
                 throw;
             }
         }*/
+
+        //public async Task<List<DdoCodeTresuryDTO> getTreasuryCodes()
+        //{
+
+        //}
+
         public async Task<int> addStudent(masterDDOModel s)
         {
             Ddo? newDdo = new Ddo();
@@ -102,9 +119,21 @@ namespace master.BAL.Services
             }
             return true;
         }
-        public async Task<Ddo> getStudentById(int id)
+        public async Task<masterDDODto> getStudentById(int id)
         {
-            return (await _masterDDORepository.GetByIdAsync(id));
+            //return (await _masterDDORepository.GetByIdAsync(id));
+            masterDDODto StudentFormSajalResult = await _masterDDORepository.GetSelectedIdColumnAsync(id, entity => new masterDDODto
+            {
+                Id = entity.Id,
+                TreasuryCode = entity.TreasuryCode,
+                //TreasuryMstld = entity.TreasuryMstId,
+                Code = entity.Code,
+                Designation = entity.Designation,
+                //DesignationMstld = entity.DesignationMstId,
+                Address = entity.Address,
+                Phone = entity.Phone
+            });
+            return StudentFormSajalResult;
         }
         /*public async Task<List<Ddo>> getStudentsByName(String name)
         {

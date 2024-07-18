@@ -2,6 +2,7 @@
 using master.BAL.IServices;
 using master.DAL.Entity;
 using master.DAL.IRepository;
+using master.DAL.Repository;
 using master.Dto;
 using master.Models;
 using System.Linq.Expressions;
@@ -43,6 +44,15 @@ namespace master.BAL.Services
                 );
                 return Result;
           
+        }
+        public async Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode()
+        {
+            IEnumerable<DdoCodeTresuryDTO> StudentFormSajalResult = await _masterSCHEME_HEADRepository.GetSelectedColumnAsync(entity => new DdoCodeTresuryDTO
+            {
+                Code = entity.Code,
+                Name = entity.Name
+            });
+            return StudentFormSajalResult;
         }
         public async Task<int> addStudent(masterSCHEME_HEADModel s)
         {

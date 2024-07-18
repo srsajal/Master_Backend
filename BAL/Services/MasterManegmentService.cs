@@ -20,10 +20,8 @@ namespace MasterManegmentSystem.BAL.Services
             _masterManegmentRepository = masterManegmentRepository;
         }
 
-        public async Task<IEnumerable<MasterManegmentDTO>> GetMasterMAJORHEAD(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<MasterManegmentDTO>> GetMastermajorhead(DynamicListQueryParameters dynamicListQueryParameters)
         {
-            try
-            {
                 string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
                 string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
                 IEnumerable<MasterManegmentDTO> result = await _masterManegmentRepository.GetSelectedColumnByConditionAsync(
@@ -40,35 +38,19 @@ namespace MasterManegmentSystem.BAL.Services
                     sortOrder);
 
                 return result;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                throw;
-            }
         }
 
        public async Task<int> AddMasterMAJORHEAD(MasterManegmentModel model)
         {
-            try
-            {
                 MajorHead newMajorHead = _mapper.Map<MajorHead>(model);
-               /* await _masterManegmentRepository.add(newMajorHead);*/
-                await _masterManegmentRepository.saveChangesAsync();
+                _masterManegmentRepository.add(newMajorHead);
+               _masterManegmentRepository.saveChangesAsync();
 
                 return newMajorHead.Id;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                throw;
-            }
         }
 
-        public async Task<bool> UpdateMasterMAJORHEAD(short id, MasterManegmentModel model)
+        public async Task<bool> UpdateMastermajorhead(short id, MasterManegmentModel model)
         {
-            try
-            {
                 MajorHead updatedStudent = await _masterManegmentRepository.GetByIdAsync(id);
 
                 if (updatedStudent == null) return false;
@@ -79,18 +61,10 @@ namespace MasterManegmentSystem.BAL.Services
                 await _masterManegmentRepository.saveChangesAsync();
 
                 return true;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                throw;
-            }
         }
 
-        public async Task<bool> DeleteMasterMAJORHEAD(short id)
+        public async Task<bool> DeleteMastermajorhead(short id)
         {
-            try
-            {
                 MajorHead student = await _masterManegmentRepository.GetByIdAsync(id);
                 if (student == null) return false;
 
@@ -98,12 +72,6 @@ namespace MasterManegmentSystem.BAL.Services
                 await _masterManegmentRepository.saveChangesAsync();
 
                 return true;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                throw;
-            }
         }
 
        
@@ -114,7 +82,7 @@ namespace MasterManegmentSystem.BAL.Services
             return _masterManegmentRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
         }
 
-        public Task<MajorHead> GetMasterMAJORHEADById(short id)
+        public Task<MajorHead> GetMastermajorheadById(short id)
         {
             return  _masterManegmentRepository.GetByIdAsync(id);
         }

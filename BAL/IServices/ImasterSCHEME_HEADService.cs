@@ -11,6 +11,8 @@ namespace master.BAL.IServices
         Task<bool> deleteStudent(int id);
         Task<SchemeHead> getStudentById(int id);
         Task<IEnumerable<masterSCHEME_HEADDto>> getmasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters);
+
+        Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode();
         //int CountWithCondition(List<FilterParameter> dynamicFilters);
         Task<int> CountMasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters);
     }
