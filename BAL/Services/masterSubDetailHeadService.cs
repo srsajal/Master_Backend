@@ -104,7 +104,8 @@ namespace master.BAL.Services
             {
                 Id = entity.Id,
                 Code = entity.Code,
-                Name = entity.Name
+                Name = entity.Name,
+                DetailHeadId = entity.DetailHeadId,
                 //Designation = entity.Designation,
                 //DesignationMstld = entity.DesignationMstId,
                 //Address = entity.Address,
