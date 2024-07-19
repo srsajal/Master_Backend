@@ -30,7 +30,7 @@ namespace master.Controllers
                 {
                     new ListHeader
                     {
-                        Name="Detail Head Code",
+                        Name="Sub Detail Head Code",
                         DataType="text",
                         FieldName ="code",
                         FilterField ="Code",
@@ -39,10 +39,19 @@ namespace master.Controllers
                     },
                     new ListHeader
                     {
-                        Name="Detail Head Name",
+                        Name="Sub Detail Head Name",
                         DataType="text",
                         FieldName ="name",
                         FilterField ="Name",
+                        IsFilterable=true,
+                        IsSortable=true,
+                    },
+                    new ListHeader
+                    {
+                        Name="Detail Head Id",
+                        DataType="number",
+                        FieldName ="detailHeadId",
+                        FilterField ="DetailHeadId",
                         IsFilterable=true,
                         IsSortable=true,
                     }
@@ -75,12 +84,12 @@ namespace master.Controllers
 
         }
 
-        /*[HttpGet("GetTreasuryCode")]
-        public async Task<IActionResult> GetTreasuryCodes()
+        [HttpGet("GetDetailCode")]
+        public async Task<IActionResult> GetDetailHeadCodes()
         {
             try
             {
-                var codes = await _masterDetailHeadService.getTreasuryCode();
+                var codes = await _masterSubDetailHeadService.getDetailCode();
                 return Ok(codes);
             }
             catch (Exception ex)
@@ -88,7 +97,7 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
-        }*/
+        }
         /*[HttpGet("GetStudentByName")]
         public async Task<IActionResult> GetStudentByName(string name)
         {

@@ -12,11 +12,13 @@ namespace master.BAL.Services
     public class masterSubDetailHeadService : ImasterSubDetailHeadService
     {
         ImasterSubDetailHeadRepository _masterSubDetailHeadRepository;
+        ImasterDetailHeadRepository _masterDetailHeadRepository;
         IMapper _mapper;
-        public masterSubDetailHeadService(ImasterSubDetailHeadRepository masterSubDetailHeadRepository, IMapper mapper)
+        public masterSubDetailHeadService(ImasterSubDetailHeadRepository masterSubDetailHeadRepository, IMapper mapper, ImasterDetailHeadRepository masterDetailHeadRepository)
         {
             _masterSubDetailHeadRepository = masterSubDetailHeadRepository;
             _mapper = mapper;
+            _masterDetailHeadRepository = masterDetailHeadRepository;
         }
         public async Task<IEnumerable<masterSubDetailHeadDto>> getSubDetailHead(DynamicListQueryParameters dynamicListQueryParameters)
         {
@@ -38,15 +40,16 @@ namespace master.BAL.Services
             );
             return StudentFormSajalResult;
         }
-        /* public async Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode()
-         {
-             IEnumerable<DdoCodeTresuryDTO> StudentFormSajalResult = await _masterTreasuryRepository.GetSelectedColumnAsync(entity => new DdoCodeTresuryDTO
-             {
-                 Code = entity.Code,
-                 Name = entity.Name
-             });
-             return StudentFormSajalResult;
-         }*/
+        public async Task<IEnumerable<DetailToSubDetailCode>> getDetailCode()
+        {
+            IEnumerable<DetailToSubDetailCode> StudentFormSajalResult = await _masterDetailHeadRepository.GetSelectedColumnAsync(entity => new DetailToSubDetailCode
+            {
+                Id = entity.Id,
+                Code = entity.Code,
+                Name = entity.Name
+            });
+            return StudentFormSajalResult;
+        }
         /*public async Task<List<Ddo>> getstudents()
         {
             try
