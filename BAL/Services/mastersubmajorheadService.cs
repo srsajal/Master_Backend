@@ -2,6 +2,7 @@
 using master.BAL.IServices;
 using master.DAL.Entity;
 using master.DAL.IRepository;
+using master.DAL.Repository;
 using master.Dto;
 using master.Models;
 using MasterManegmentSystem.BAL.IServices;
@@ -14,13 +15,15 @@ namespace master.BAL.Services
 {
     public class mastersubmajorheadService : ImastersubmajorheadService
     {
+        private readonly IMasterManegmentRepository _masterManegmentRepository;
         private readonly ImastersubmajorheadRepository _mastersubmajorheadRepository;
         private readonly IMapper _mapper;
 
-        public mastersubmajorheadService(IMapper mapper, ImastersubmajorheadRepository mastersubmajorheadRepository, ImastersubmajorheadRepository imastersubmajorheadRepository)
+        public mastersubmajorheadService(IMapper mapper,  ImastersubmajorheadRepository imastersubmajorheadRepository, IMasterManegmentRepository masterManegmentRepository)
         {
             _mapper = mapper;
             _mastersubmajorheadRepository = imastersubmajorheadRepository;
+            _masterManegmentRepository = masterManegmentRepository;
         }
 
         public async Task<IEnumerable<mastersubmajorheadDTO>> GetMastersubmajorhead(DynamicListQueryParameters dynamicListQueryParameters)
@@ -44,6 +47,15 @@ namespace master.BAL.Services
 
             return result;
         }
+        public async Task<IEnumerable<MasterManegmentDTO>> GetMajorHeadcode()
+        {
+            IEnumerable<MasterManegmentDTO> StudentFormSajalResult = await _masterManegmentRepository.GetSelectedColumnAsync(entity => new MasterManegmentDTO
+            { 
+                Code = entity.Code,
+                Name = entity.Name
+            });
+            return StudentFormSajalResult;
+        }   
 
         public async Task<int> AddMasterSubmajorHead(mastersubmajorheadModel model)
         {

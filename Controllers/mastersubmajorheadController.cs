@@ -1,19 +1,20 @@
 ﻿using master.BAL.IServices;
+using master.BAL.Services;
 using master.Dto;
 using master.Models;
 using masterDDO.Enums;
 using masterDDO.Helpers;
-using MasterManegmentSystem.BAL.IServices;
-using MasterManegmentSystem.Dto;
-using MasterManegmentSystem.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace master.Controllers
 {
-    public class mastersubmajorheadController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class masterSubMajorHeadController : ControllerBase
     {
         ImastersubmajorheadService _mastersubmajorheadService;
-        public mastersubmajorheadController(ImastersubmajorheadService es)
+        public masterSubMajorHeadController(ImastersubmajorheadService es)
         {
             _mastersubmajorheadService = es;
         }
@@ -85,6 +86,20 @@ namespace master.Controllers
             }
 
         }
+        [HttpGet("GetMajorHeadcode")]
+        public async Task<IActionResult> GetMajorHeadcode()
+        {
+            try
+            {
+                var codes = await _mastersubmajorheadService.GetMajorHeadcode();
+                return Ok(codes);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+        }
 
         [HttpPost("AddMasterSubmajorHead")]
         public async Task<IActionResult> AddMasterSubmajorHead(mastersubmajorheadModel s)
@@ -134,6 +149,5 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-    
     }
 }
