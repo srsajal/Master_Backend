@@ -38,4 +38,7 @@ public partial class Ddo
     [Column("phone")]
     [StringLength(20)]
     public string? Phone { get; set; }
+
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
 }

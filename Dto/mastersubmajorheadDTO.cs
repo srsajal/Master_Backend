@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public string Code { get; set; }
         public string? Name { get; set; }
-        public short? MajorHeadId { get; set; }
+        public int? MajorHeadId { get; set; }
     }
 }

@@ -21,6 +21,9 @@ public partial class DetailHead
     [StringLength(100)]
     public string? Name { get; set; }
 
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
+
     [InverseProperty("DetailHead")]
     public virtual ICollection<SubDetailHead> SubDetailHeads { get; set; } = new List<SubDetailHead>();
 }
