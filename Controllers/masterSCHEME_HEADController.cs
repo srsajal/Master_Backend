@@ -140,6 +140,8 @@ namespace master.Controllers
         }*/
         [HttpPost("AddMasterSCHEME_HEAD")]
         public async Task<IActionResult> AddStudent(masterSCHEME_HEADModel s)
+        [HttpPost("AddmasterSCHEME-HEAD")]
+        public async Task<IActionResult>AddStudent(masterSCHEME_HEADModel s)
         {
             try
             {
