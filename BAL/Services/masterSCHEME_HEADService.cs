@@ -14,11 +14,13 @@ namespace master.BAL.Services
 
         ImasterSCHEME_HEADRepository _masterSCHEME_HEADRepository;
         IMapper _mapper;
+        ImasterMinorHeadRepository _masterMinorHeadRepository;
 
-        public masterSCHEME_HEADService(IMapper mapper, ImasterSCHEME_HEADRepository masterSCHEME_HEADRepository)
+        public masterSCHEME_HEADService(IMapper mapper, ImasterSCHEME_HEADRepository masterSCHEME_HEADRepository, ImasterMinorHeadRepository masterMinorHeadRepository)
         {
             _mapper = mapper;
             _masterSCHEME_HEADRepository = masterSCHEME_HEADRepository;
+       _masterMinorHeadRepository = masterMinorHeadRepository;
         }
 
         public async Task<IEnumerable<masterSCHEME_HEADDto>> getmasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters)
@@ -45,14 +47,15 @@ namespace master.BAL.Services
                 return Result;
           
         }
-        public async Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode()
+        public async Task<IEnumerable<SchemeMinorheadfromMINORHEADIdDTO>> getSchemeMinorheadfromMINORHEADId()
         {
-            IEnumerable<DdoCodeTresuryDTO> StudentFormSajalResult = await _masterSCHEME_HEADRepository.GetSelectedColumnAsync(entity => new DdoCodeTresuryDTO
-            {
+            IEnumerable<SchemeMinorheadfromMINORHEADIdDTO> Result = await _masterMinorHeadRepository.GetSelectedColumnAsync(entity => new SchemeMinorheadfromMINORHEADIdDTO
+            { 
+                Id =entity.Id,
                 Code = entity.Code,
                 Name = entity.Name
             });
-            return StudentFormSajalResult;
+            return Result;
         }
         public async Task<int> addStudent(masterSCHEME_HEADModel s)
         {
