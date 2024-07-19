@@ -58,7 +58,7 @@ namespace master.BAL.Services
             return newMinorHead.Id;
 
         }
-        public async Task<bool> updateMinorHead(short id, masterMinorHeadModel s)
+        public async Task<bool> updateMinorHead(int id, masterMinorHeadModel s)
         {
             var updatedMinorHead = await _masterMinorHeadRepository.GetByIdAsync(id);
 
@@ -109,9 +109,6 @@ namespace master.BAL.Services
             return _masterMinorHeadRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
         }
 
-        public Task<bool> updateMinorHead(int id, masterMinorHeadModel s)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }
