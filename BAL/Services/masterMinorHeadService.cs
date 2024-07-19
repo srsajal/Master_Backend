@@ -2,6 +2,7 @@
 using master.BAL.IServices;
 using master.DAL.Entity;
 using master.DAL.IRepository;
+using master.DAL.Repository;
 using master.Dto;
 using master.Models;
 using System.Linq.Expressions;
@@ -38,17 +39,16 @@ namespace master.BAL.Services
             return masterminor;
 
         }
-        /*public async Task<List<MinorHead>> getMinorHead()
+
+       public async Task<IEnumerable<SubMajorHeadToMinorHeadDTO>> getSubMajorHeadCode()
         {
-            try
+            IEnumerable<SubMajorHeadToMinorHeadDTO> StudentFormSajalResult = await _masterMinorHeadRepository.GetSelectedColumnAsync(entity => new SubMajorHeadToMinorHeadDTO
             {
-                return (await _masterMinorHeadRepository.get()).ToList();
-            }
-            catch
-            {
-                throw;
-            }
-        }*/
+                Code = entity.Code,
+                Name = entity.Name
+            });
+            return StudentFormSajalResult;
+        }
         public async Task<int> addMinorHead(masterMinorHeadModel s)
         {
             MinorHead? newMinorHead = new MinorHead();
@@ -103,6 +103,7 @@ namespace master.BAL.Services
 
         }*/
 
+  
         public async Task<int> CountMasterMinorHead(DynamicListQueryParameters dynamicListQueryParameters)
         {
             Expression<Func<MinorHead, bool>> condition = d => true; // Default condition if no specific condition is required

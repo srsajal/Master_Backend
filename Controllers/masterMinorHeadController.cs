@@ -84,19 +84,22 @@ namespace master.Controllers
             }
 
         }
-        /*[HttpGet("GetStudentByName")]
-        public async Task<IActionResult> GetStudentByName(string name)
+
+        [HttpGet("GetSubMajorHeadCode")]
+        public async Task<IActionResult> GetSubMajorHeadCodes()
         {
             try
             {
-                List<Ddo> students = await _imasterDDOService.getStudentsByName(name);
-                return Ok(students);
+                var codes = await _imasterMinorHeadService.getSubMajorHeadCode();
+                return Ok(codes);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-        }*/
+
+        }
+
         [HttpPost("AddmasterMinorHead")]
         public async Task<IActionResult> AddMinorHead(masterMinorHeadModel s)
         {
