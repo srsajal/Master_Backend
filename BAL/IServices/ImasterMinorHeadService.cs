@@ -13,6 +13,7 @@ namespace master.BAL.IServices
         Task<MinorHead> getMinorHeadById(int id);
         Task<IEnumerable<masterMinorHeadDto>> getmasterMinorHead(DynamicListQueryParameters dynamicListQueryParameters);
         // int CountWithCondition(List<FilterParameter> dynamicFilters);
+        Task<IEnumerable<SubMajorHeadToMinorHeadDTO>> getSubMajorHeadCode();
         Task<int> CountMasterMinorHead(DynamicListQueryParameters dynamicListQueryParameters);
     }
 }
