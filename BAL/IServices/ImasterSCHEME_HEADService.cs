@@ -12,7 +12,7 @@ namespace master.BAL.IServices
         Task<SchemeHead> getStudentById(int id);
         Task<IEnumerable<masterSCHEME_HEADDto>> getmasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters);
 
-        Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode();
+        Task<IEnumerable<SchemeMinorheadfromMINORHEADIdDTO>> getSchemeMinorheadfromMINORHEADId();
         //int CountWithCondition(List<FilterParameter> dynamicFilters);
         Task<int> CountMasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters);
     }

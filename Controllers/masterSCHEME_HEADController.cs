@@ -14,10 +14,12 @@ namespace master.Controllers
     public class masterSCHEME_HEADController : ControllerBase
     {
         ImasterSCHEME_HEADService _imasterSCHEMEHEADService;
+        ImasterMinorHeadService _imasterMinorHeadService;
 
-        public masterSCHEME_HEADController(ImasterSCHEME_HEADService imasterSCHEMEHEADService)
+        public masterSCHEME_HEADController(ImasterSCHEME_HEADService imasterSCHEMEHEADService, ImasterMinorHeadService imasterMinorHeadService)
         {
             _imasterSCHEMEHEADService = imasterSCHEMEHEADService;
+            _imasterMinorHeadService = imasterMinorHeadService;
         }
 
 
@@ -96,12 +98,12 @@ namespace master.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetTreasuryCode")]
-        public async Task<IActionResult> GetTreasuryCodes()
+        [HttpGet("GetMasterSCHEME_HEADfromMINORHEADId")]
+        public async Task<IActionResult> getgetSchemeMinorheadfromMINORHEADId()
         {
             try
             {
-                var codes = await _imasterSCHEMEHEADService.getTreasuryCode();
+                var codes = await _imasterSCHEMEHEADService.getSchemeMinorheadfromMINORHEADId();
                 return Ok(codes);
             }
             catch (Exception ex)
