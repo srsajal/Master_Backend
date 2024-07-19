@@ -40,9 +40,9 @@ namespace master.BAL.Services
             );
             return StudentFormSajalResult;
         }
-        public async Task<IEnumerable<DetailToSubDetailCode>> getDetailCode()
+        public async Task<IEnumerable<DetailToSubDetailCodeDTO>> getDetailCode()
         {
-            IEnumerable<DetailToSubDetailCode> StudentFormSajalResult = await _masterDetailHeadRepository.GetSelectedColumnAsync(entity => new DetailToSubDetailCode
+            IEnumerable<DetailToSubDetailCodeDTO> StudentFormSajalResult = await _masterDetailHeadRepository.GetSelectedColumnAsync(entity => new DetailToSubDetailCodeDTO
             {
                 Id = entity.Id,
                 Code = entity.Code,
