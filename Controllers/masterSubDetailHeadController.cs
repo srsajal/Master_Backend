@@ -11,52 +11,26 @@ namespace master.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class masterSCHEME_HEADController : ControllerBase
+    public class masterSubDetailHeadController : ControllerBase
     {
-        ImasterSCHEME_HEADService _imasterSCHEMEHEADService;
-
-        public masterSCHEME_HEADController(ImasterSCHEME_HEADService imasterSCHEMEHEADService)
+        ImasterSubDetailHeadService _masterSubDetailHeadService;
+        public masterSubDetailHeadController(ImasterSubDetailHeadService masterSubDetailHeadService)
         {
-            _imasterSCHEMEHEADService = imasterSCHEMEHEADService;
+            _masterSubDetailHeadService = masterSubDetailHeadService;
         }
-
-
-        /* [HttpGet("GetMasterDdo")]
-         public async Task<IActionResult> GetStudent()
-         {
-             try
-             {
-                 var students = await _imasterDDOService.getstudents();
-                 return Ok(students);
-             }
-             catch (Exception ex)
-             {
-                 return StatusCode(500, "Internal server error");
-             }
-         }*/
-
-        [HttpPost("GetMasterSCHEME_HEAD")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterSCHEME_HEADDto>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        [HttpPost("GetMasterSubDetailHead")]
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterSubDetailHeadDto>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
         {
-            ServiceResponse<DynamicListResult<IEnumerable<masterSCHEME_HEADDto>>> response = new();
+            ServiceResponse<DynamicListResult<IEnumerable<masterSubDetailHeadDto>>> response = new();
             try
             {
-                DynamicListResult<IEnumerable<masterSCHEME_HEADDto>> result = new DynamicListResult<IEnumerable<masterSCHEME_HEADDto>>
+                DynamicListResult<IEnumerable<masterSubDetailHeadDto>> result = new DynamicListResult<IEnumerable<masterSubDetailHeadDto>>
                 {
                     Headers = new List<ListHeader>
                 {
                     new ListHeader
                     {
-                        Name="DemandCode ",
-                        DataType="text",
-                        FieldName ="demandCode",
-                        FilterField ="DemandCode",
-                        IsFilterable=true,
-                        IsSortable=true,
-                    },
-                    new ListHeader
-                    {
-                        Name="Scheme Head Code",
+                        Name="Sub Detail Head Code",
                         DataType="text",
                         FieldName ="code",
                         FilterField ="Code",
@@ -65,7 +39,7 @@ namespace master.Controllers
                     },
                     new ListHeader
                     {
-                        Name=" Scheme Head Name",
+                        Name="Sub Detail Head Name",
                         DataType="text",
                         FieldName ="name",
                         FilterField ="Name",
@@ -74,17 +48,16 @@ namespace master.Controllers
                     },
                     new ListHeader
                     {
-                        Name="MinorHeadId",
+                        Name="Detail Head Id",
                         DataType="number",
-                        FieldName ="minorHeadId",
-                        FilterField ="MinorHeadId",
+                        FieldName ="detailHeadId",
+                        FilterField ="DetailHeadId",
                         IsFilterable=true,
                         IsSortable=true,
-                    },
-
+                    }
                 },
-                    Data = await _imasterSCHEMEHEADService.getmasterSCHEME_HEAD(dynamicListQueryParameters),
-                    DataCount = await _imasterSCHEMEHEADService.CountMasterSCHEME_HEAD(dynamicListQueryParameters)
+                    Data = await _masterSubDetailHeadService.getSubDetailHead(dynamicListQueryParameters),
+                    DataCount = await _masterSubDetailHeadService.CountSubDetailHead(dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -96,13 +69,13 @@ namespace master.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetTreasuryCode")]
-        public async Task<IActionResult> GetTreasuryCodes()
+        [HttpGet("GetMasterSubDetailHeadById")]
+        public async Task<IActionResult> GetStudentById(short id)
         {
             try
             {
-                var codes = await _imasterSCHEMEHEADService.getTreasuryCode();
-                return Ok(codes);
+                var student = await _masterSubDetailHeadService.getSubDetailHeadById(id);
+                return Ok(student);
             }
             catch (Exception ex)
             {
@@ -111,13 +84,13 @@ namespace master.Controllers
 
         }
 
-        [HttpGet("GetMasterSCHEME_HEADById")]
-        public async Task<IActionResult> GetStudentById(int id)
+        [HttpGet("GetDetailCode")]
+        public async Task<IActionResult> GetDetailHeadCodes()
         {
             try
             {
-                var student = await _imasterSCHEMEHEADService.getStudentById(id);
-                return Ok(student);
+                var codes = await _masterSubDetailHeadService.getDetailCode();
+                return Ok(codes);
             }
             catch (Exception ex)
             {
@@ -138,12 +111,12 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }*/
-        [HttpPost("AddmasterSCHEME-HEAD")]
-        public async Task<IActionResult>AddStudent(masterSCHEME_HEADModel s)
+        [HttpPost("AddMasterSubDetailHead")]
+        public async Task<IActionResult> AddStudent(masterSubDetailHeadModel s)
         {
             try
             {
-                int id = await _imasterSCHEMEHEADService.addStudent(s);
+                int id = await _masterSubDetailHeadService.addSubDetailHead(s);
                 return Ok(id);
             }
             catch (Exception ex)
@@ -151,12 +124,12 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        [HttpPut("UpdateMasterSCHEME_HEAD")]
-        public async Task<IActionResult> UpdateStudent(int id, masterSCHEME_HEADModel s)
+        [HttpPut("UpdateMasterSubDetailHead")]
+        public async Task<IActionResult> UpdateStudent(short id, masterSubDetailHeadModel s)
         {
             try
             {
-                await _imasterSCHEMEHEADService.updateStudent(id, s);
+                await _masterSubDetailHeadService.updateSubDetailHead(id, s);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)
@@ -169,12 +142,12 @@ namespace master.Controllers
             }
         }
 
-        [HttpDelete("DeleteMasterSchemeHead")]
-        public async Task<IActionResult> DeleteStudent(int id)
+        [HttpDelete("DeleteMasterSubDetailHead")]
+        public async Task<IActionResult> DeleteStudent(short id)
         {
             try
             {
-                await _imasterSCHEMEHEADService.deleteStudent(id);
+                await _masterSubDetailHeadService.deleteSubDetailHead(id);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)
@@ -188,4 +161,3 @@ namespace master.Controllers
         }
     }
 }
-

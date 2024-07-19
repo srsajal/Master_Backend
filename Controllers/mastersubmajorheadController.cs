@@ -1,4 +1,6 @@
-﻿using master.Dto;
+﻿using master.BAL.IServices;
+using master.Dto;
+using master.Models;
 using masterDDO.Enums;
 using masterDDO.Helpers;
 using MasterManegmentSystem.BAL.IServices;
@@ -6,29 +8,27 @@ using MasterManegmentSystem.Dto;
 using MasterManegmentSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MasterManegmentSystem.Controllers
+namespace master.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MasterManegmentControllers : Controller
+    public class mastersubmajorheadController : Controller
     {
-        IMasterManegmentService _imasterDDOService;
-        public MasterManegmentControllers(IMasterManegmentService es)
+        ImastersubmajorheadService _mastersubmajorheadService;
+        public mastersubmajorheadController(ImastersubmajorheadService es)
         {
-            _imasterDDOService = es;
+            _mastersubmajorheadService = es;
         }
-        [HttpPost("GetMasterMAJORHEAD")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        [HttpPost("GetMastersubmajorhead")]
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<mastersubmajorheadDTO>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
         {
-            ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>> response = new();
+            ServiceResponse<DynamicListResult<IEnumerable<mastersubmajorheadDTO>>> response = new();
             try
             {
-                DynamicListResult<IEnumerable<MasterManegmentDTO>> result = new DynamicListResult<IEnumerable<MasterManegmentDTO>>
+                DynamicListResult<IEnumerable<mastersubmajorheadDTO>> result = new DynamicListResult<IEnumerable<mastersubmajorheadDTO>>
                 {
                     Headers = new List<ListHeader>
                 {
-                    
-                      
+
+
                     new ListHeader
                     {
                         Name="Code",
@@ -47,10 +47,19 @@ namespace MasterManegmentSystem.Controllers
                         IsFilterable=true,
                         IsSortable=true,
                     },
-                    
+                    new ListHeader
+                    {
+                        Name="MajorHeadId",
+                        DataType="text",
+                        FieldName ="majorHeadId",
+                        FilterField ="MajorHeadId",
+                        IsFilterable=true,
+                        IsSortable=true,
+                    },
+
                 },
-                    Data = await _imasterDDOService.GetMastermajorhead(dynamicListQueryParameters),
-                    DataCount = await _imasterDDOService.CountMasterDDO(dynamicListQueryParameters)
+                    Data = await _mastersubmajorheadService.GetMastersubmajorhead(dynamicListQueryParameters),
+                    DataCount = await _mastersubmajorheadService.CountMastersubmajorhead(dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -62,12 +71,12 @@ namespace MasterManegmentSystem.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetMasterMAJORHEADById")]
-        public async Task<IActionResult> GetMasterMAJORHEADById(short id)
+        [HttpGet("GetMasterMastersubMajorHeadById")]
+        public async Task<IActionResult> GetMasterMastersubMajorHeadById(int id)
         {
             try
             {
-                var student = await _imasterDDOService.GetMastermajorheadById(id);
+                var student = await _mastersubmajorheadService.GetMasterMastersubMajorHeadById(id);
                 return Ok(student);
             }
             catch (Exception ex)
@@ -77,12 +86,12 @@ namespace MasterManegmentSystem.Controllers
 
         }
 
-        [HttpPost("AddMasterMAJORHEAD")]
-        public async Task<IActionResult> AddMasterMAJORHEAD(MasterManegmentModel s)
+        [HttpPost("AddMasterSubmajorHead")]
+        public async Task<IActionResult> AddMasterSubmajorHead(mastersubmajorheadModel s)
         {
             try
             {
-                int id = await _imasterDDOService.AddMasterMAJORHEAD(s);
+                int id = await _mastersubmajorheadService.AddMasterSubmajorHead(s);
                 return Ok(id);
             }
             catch (Exception ex)
@@ -90,12 +99,12 @@ namespace MasterManegmentSystem.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        [HttpPut("UpdateMasterMAJORHEAD")]
-        public async Task<IActionResult> UpdateMasterMAJORHEAD(short id, MasterManegmentModel s)
+        [HttpPut("UpdateMastersubMajorHead")]
+        public async Task<IActionResult> UpdateMastersubMajorHead(int id, mastersubmajorheadModel s)
         {
             try
             {
-                await _imasterDDOService.UpdateMastermajorhead(id, s);
+                await _mastersubmajorheadService.UpdateMastersubMajorHead(id, s);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)
@@ -108,12 +117,12 @@ namespace MasterManegmentSystem.Controllers
             }
         }
 
-        [HttpDelete("DeleteMasterMAJORHEAD")]
-        public async Task<IActionResult> DeleteMasterMAJORHEAD(short id)
+        [HttpDelete("DeleteMastersubMajorHead")]
+        public async Task<IActionResult> DeleteMastersubMajorHead(int id)
         {
             try
             {
-                await _imasterDDOService.DeleteMastermajorhead(id);
+                await _mastersubmajorheadService.DeleteMastersubMajorHead(id);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)
@@ -125,5 +134,6 @@ namespace MasterManegmentSystem.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+    
     }
 }

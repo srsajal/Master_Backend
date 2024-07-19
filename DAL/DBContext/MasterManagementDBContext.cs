@@ -110,7 +110,7 @@ public partial class MasterManagementDBContext : DbContext
 
         modelBuilder.Entity<MajorHead>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("major_head_pkey");
+            entity.HasKey(e => e.Id).HasName("major_head1_pkey");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Code).IsFixedLength();
