@@ -4,18 +4,20 @@ using masterDDO.Helpers;
 using MasterManegmentSystem.BAL.IServices;
 using MasterManegmentSystem.Dto;
 using MasterManegmentSystem.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MasterManegmentSystem.Controllers
+namespace master.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MasterManegmentControllers : Controller
+    public class masterMajorHeadController : ControllerBase
     {
         IMasterManegmentService _imasterDDOService;
-        public MasterManegmentControllers(IMasterManegmentService es)
+        public masterMajorHeadController(IMasterManegmentService es)
         {
-            _imasterDDOService = es;
+            _imasterDDOService = es;    
+            
         }
         [HttpPost("GetMasterMAJORHEAD")]
         public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
@@ -27,8 +29,8 @@ namespace MasterManegmentSystem.Controllers
                 {
                     Headers = new List<ListHeader>
                 {
-                    
-                      
+
+
                     new ListHeader
                     {
                         Name="Code",
@@ -47,7 +49,7 @@ namespace MasterManegmentSystem.Controllers
                         IsFilterable=true,
                         IsSortable=true,
                     },
-                    
+
                 },
                     Data = await _imasterDDOService.GetMastermajorhead(dynamicListQueryParameters),
                     DataCount = await _imasterDDOService.CountMasterDDO(dynamicListQueryParameters)
