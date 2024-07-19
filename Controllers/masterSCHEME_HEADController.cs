@@ -138,8 +138,8 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }*/
-        [HttpPost("AddMasterSCHEME_HEAD")]
-        public async Task<IActionResult> AddStudent(masterSCHEME_HEADModel s)
+        [HttpPost("AddmasterSCHEME-HEAD")]
+        public async Task<IActionResult>AddStudent(masterSCHEME_HEADModel s)
         {
             try
             {
