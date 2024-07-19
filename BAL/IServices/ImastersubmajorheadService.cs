@@ -13,7 +13,7 @@ namespace master.BAL.IServices
         Task<bool> UpdateMastersubMajorHead(int id, mastersubmajorheadModel model);
         Task<bool> DeleteMastersubMajorHead(int id);
         Task<SubMajorHead> GetMasterMastersubMajorHeadById(int id);
-        Task<IEnumerable<mastersubmajorheadDTO>> GetMajorHeadcode();
+        Task<IEnumerable<MasterManegmentDTO>> GetMajorHeadcode();
         Task<int> CountMastersubmajorhead(DynamicListQueryParameters dynamicListQueryParameters);
     }
 }

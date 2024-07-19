@@ -47,9 +47,10 @@ namespace master.BAL.Services
 
             return result;
         }
-        public async Task<IEnumerable<mastersubmajorheadDTO>> GetMajorHeadcode()
+        public async Task<IEnumerable<MasterManegmentDTO>> GetMajorHeadcode()
         {
-            IEnumerable<mastersubmajorheadDTO> StudentFormSajalResult = await _masterManegmentRepository.GetSelectedColumnAsync(entity => new mastersubmajorheadDTO { 
+            IEnumerable<MasterManegmentDTO> StudentFormSajalResult = await _masterManegmentRepository.GetSelectedColumnAsync(entity => new MasterManegmentDTO
+            { 
                 Code = entity.Code,
                 Name = entity.Name
             });
