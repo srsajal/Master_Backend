@@ -119,7 +119,7 @@ public partial class MasterManagementDBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("major_head1_pkey");
 
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('master.major_head_1_id_seq'::regclass)");
+            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Code).IsFixedLength();
             entity.Property(e => e.IsActive).HasDefaultValueSql("true");
         });
