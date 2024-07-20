@@ -50,7 +50,7 @@ namespace MasterManegmentSystem.BAL.Services
                 return newMajorHead.Id;
         }
 
-        public async Task<bool> UpdateMastermajorhead(short id, MasterManegmentModel model)
+        public async Task<bool> UpdateMastermajorhead(int id, MasterManegmentModel model)
         {
                 MajorHead updatedStudent = await _masterManegmentRepository.GetByIdAsync(id);
 
@@ -64,7 +64,7 @@ namespace MasterManegmentSystem.BAL.Services
                 return true;
         }
 
-        public async Task<bool> DeleteMastermajorhead(short id)
+        public async Task<bool> DeleteMastermajorhead(int  id)
         {
                 MajorHead student = await _masterManegmentRepository.GetByIdAsync(id);
                 if (student == null) return false;

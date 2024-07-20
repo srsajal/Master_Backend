@@ -93,7 +93,7 @@ namespace master.Controllers
             }
         }
         [HttpPut("UpdateMasterMAJORHEAD")]
-        public async Task<IActionResult> UpdateMasterMAJORHEAD(short id, MasterManegmentModel s)
+        public async Task<IActionResult> UpdateMasterMAJORHEAD(int id, MasterManegmentModel s)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace master.Controllers
         }
 
         [HttpDelete("DeleteMasterMAJORHEAD")]
-        public async Task<IActionResult> DeleteMasterMAJORHEAD(short id)
+        public async Task<IActionResult> DeleteMasterMAJORHEAD(int id)
         {
             try
             {
