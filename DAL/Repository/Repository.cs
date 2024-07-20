@@ -1,4 +1,5 @@
-﻿using master.DAL.Entity;
+﻿
+using master.DAL.Entity;
 using master.DAL.IRepository;
 using master.Dto;
 using masterDDO.Helpers;
@@ -96,7 +97,6 @@ namespace master.DAL.Repository
 
         public async Task<ICollection<TResult>> GetSelectedColumnAsync<TResult>( Expression<Func<T, TResult>> selectExpression)
         {
-           
             IQueryable<T> query = this._masterDdoContext.Set<T>();
             var result = await query.Select(selectExpression).ToListAsync();
             return result;

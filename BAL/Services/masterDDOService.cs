@@ -26,6 +26,20 @@ namespace master.BAL.Services
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
+            /*dynamicListQueryParameters.filterParameters = new List<FilterParameter>();
+            dynamicListQueryParameters?.filterParameters.Add(new FilterParameter
+            {
+                Field = "IsActive",
+                Value = "true",
+                Operator = "equals"
+            });*/
+            /*dynamicListQueryParameters.filterParameters = new List<FilterParameter>();
+            dynamicListQueryParameters?.filterParameters.Add(new FilterParameter
+            {
+                Field = "Address",
+                Value = "Raiganj",
+                Operator = "equals"
+            });*/
             IEnumerable<masterDDODto> StudentFormSajalResult = await _masterDDORepository.GetSelectedColumnByConditionAsync(entity => new masterDDODto
             {
                 Id = entity.Id,
@@ -35,7 +49,7 @@ namespace master.BAL.Services
                 Designation = entity.Designation,
                 //DesignationMstld = entity.DesignationMstId,
                 Address = entity.Address,
-                Phone = entity.Phone
+                Phone = entity.Phone,
             },
             dynamicListQueryParameters.PageIndex,
             dynamicListQueryParameters.PageSize,
@@ -112,11 +126,18 @@ namespace master.BAL.Services
         public async Task<bool> deleteStudent(int id)
         {
             var toDeleteStudent = await _masterDDORepository.GetByIdAsync(id);
+
+            toDeleteStudent.IsActive = false;
+            
+            _masterDDORepository.update(toDeleteStudent);
+            _masterDDORepository.saveChangesManage();
+
+            /*var toDeleteStudent = await _masterDDORepository.GetByIdAsync(id);
             if (toDeleteStudent != null)
             {
                 _masterDDORepository.delete(toDeleteStudent);
                 await _masterDDORepository.saveChangesAsync();
-            }
+            }*/
             return true;
         }
         public async Task<masterDDODto> getStudentById(int id)

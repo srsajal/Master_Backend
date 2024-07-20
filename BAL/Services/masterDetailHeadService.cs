@@ -87,12 +87,12 @@ namespace master.BAL.Services
         }
         public async Task<bool> deleteDetailHead(short id)
         {
+
             var toDeleteStudent = await _masterDetailHeadRepository.GetByIdAsync(id);
-            if (toDeleteStudent != null)
-            {
-                _masterDetailHeadRepository.delete(toDeleteStudent);
-                await _masterDetailHeadRepository.saveChangesAsync();
-            }
+
+            toDeleteStudent.IsActive = false;
+            _masterDetailHeadRepository.update(toDeleteStudent);
+            await _masterDetailHeadRepository.saveChangesAsync();
             return true;
         }
         public async Task<masterDetailHeadDto> getDetailHeadById(short id)
