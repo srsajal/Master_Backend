@@ -43,8 +43,9 @@ namespace MasterManegmentSystem.BAL.Services
        public async Task<int> AddMasterMAJORHEAD(MasterManegmentModel model)
         {
                 MajorHead newMajorHead = _mapper.Map<MajorHead>(model);
+                newMajorHead.Id = Convert.ToInt32(newMajorHead.Code);
                 _masterManegmentRepository.add(newMajorHead);
-               _masterManegmentRepository.saveChangesAsync();
+                _masterManegmentRepository.saveChangesAsync();
 
                 return newMajorHead.Id;
         }
@@ -82,7 +83,7 @@ namespace MasterManegmentSystem.BAL.Services
             return _masterManegmentRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
         }
 
-        public Task<MajorHead> GetMastermajorheadById(short id)
+        public Task<MajorHead> GetMastermajorheadById(int id)
         {
             return  _masterManegmentRepository.GetByIdAsync(id);
         }

@@ -12,7 +12,7 @@ namespace MasterManegmentSystem.BAL.IServices
           Task<int> AddMasterMAJORHEAD(MasterManegmentModel model);
            Task<bool> UpdateMastermajorhead(short id, MasterManegmentModel model);
            Task<bool> DeleteMastermajorhead(short id);
-        Task<MajorHead> GetMastermajorheadById(short id);
+        Task<MajorHead> GetMastermajorheadById(int id);
         Task<int> CountMasterDDO(DynamicListQueryParameters dynamicListQueryParameters);
     }
 }

@@ -65,7 +65,7 @@ namespace master.Controllers
         }
 
         [HttpGet("GetMasterMAJORHEADById")]
-        public async Task<IActionResult> GetMasterMAJORHEADById(short id)
+        public async Task<IActionResult> GetMasterMAJORHEADById(int id)
         {
             try
             {
