@@ -55,7 +55,7 @@ namespace master.BAL.Services
                 Code = entity.Code,
                 Name = entity.Name
             });
-            return StudentFormSajalResult.Take(90);
+            return StudentFormSajalResult;
         }   
 
         public async Task<int> AddMasterSubmajorHead(mastersubmajorheadModel model)

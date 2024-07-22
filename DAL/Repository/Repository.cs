@@ -96,14 +96,14 @@ namespace master.DAL.Repository
         }
 
         public async Task<ICollection<TResult>> GetSelectedColumnByConditionAsync<TResult>(
-     Expression<Func<T, bool>> filterExpression,
-     Expression<Func<T, TResult>> selectExpression,
-     int pageIndex = 0,
-     int pageSize = 10,
-     List<FilterParameter> dynamicFilters = null,
-     string orderByField = null,
-     string orderByOrder = null
- )
+             Expression<Func<T, bool>> filterExpression,
+             Expression<Func<T, TResult>> selectExpression,
+             int pageIndex = 0,
+             int pageSize = 10,
+             List<FilterParameter> dynamicFilters = null,
+             string orderByField = null,
+             string orderByOrder = null
+         )
         {
             IQueryable<T> query = this._masterDdoContext.Set<T>().Where(filterExpression);
 
@@ -131,7 +131,7 @@ namespace master.DAL.Repository
                     query = query.OrderByDescending(lambda);
                 }
             }
-            var result = await query.Select(selectExpression).Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
+            var result = await query.Select(selectExpression).Skip(pageIndex).Take(pageSize).ToListAsync();
             return result;
         }
         public async Task<ICollection<TResult>> GetSelectedColumnAsync<TResult>( Expression<Func<T, TResult>> selectExpression)

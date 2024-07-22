@@ -96,7 +96,7 @@ namespace master.Controllers
                     }
                 },
                     Data = await _imasterDDOService.getmasterDDO(isActive ,dynamicListQueryParameters),
-                    DataCount = await _imasterDDOService.CountMasterDDO(dynamicListQueryParameters)
+                    DataCount = await _imasterDDOService.CountMasterDDO(isActive,dynamicListQueryParameters)
                 };
                 response.result = result;
             }
