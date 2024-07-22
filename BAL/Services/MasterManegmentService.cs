@@ -5,6 +5,7 @@ using MasterManegmentSystem.BAL.IServices;
 using MasterManegmentSystem.DAL.IRepository;
 using MasterManegmentSystem.Dto;
 using MasterManegmentSystem.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace MasterManegmentSystem.BAL.Services
@@ -40,16 +41,21 @@ namespace MasterManegmentSystem.BAL.Services
                 return result;
         }
 
-       public async Task<int> AddMasterMAJORHEAD(MasterManegmentModel model)
+        public async Task<int> AddMasterMAJORHEAD(MasterManegmentModel model)
         {
-                MajorHead newMajorHead = _mapper.Map<MajorHead>(model);
-                newMajorHead.Id = Convert.ToInt32(newMajorHead.Code);
-                _masterManegmentRepository.add(newMajorHead);
-                _masterManegmentRepository.saveChangesAsync();
+            MajorHead newMajorHead = _mapper.Map<MajorHead>(model);
+            newMajorHead.Id = Convert.ToInt32(newMajorHead.Code);
+            _masterManegmentRepository.Add(newMajorHead);
+            await _masterManegmentRepository.SaveChangesAsync();
 
-                return newMajorHead.Id;
+            return newMajorHead.Id;
         }
 
+
+        public async Task<bool> MasterMAJORHEADExistsByCode(string code)
+        {
+            return await _masterManegmentRepository.AnyAsync(m => m.Code == code);
+        }
         public async Task<bool> UpdateMastermajorhead(int id, MasterManegmentModel model)
         {
                 MajorHead updatedStudent = await _masterManegmentRepository.GetByIdAsync(id);
@@ -87,7 +93,8 @@ namespace MasterManegmentSystem.BAL.Services
         {
             return  _masterManegmentRepository.GetByIdAsync(id);
         }
+       
 
-        
+
     }
 }
