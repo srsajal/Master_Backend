@@ -14,6 +14,7 @@ namespace master.BAL.IServices
         Task<int> addStudent(masterDDOModel s);
         Task<bool> updateStudent(int id, masterDDOModel s);
         Task<bool> deleteStudent(int studentId);
+        Task<bool> restoreMasterDdo(int studentId);
         Task<masterDDODto> getStudentById(int id);
         Task<IEnumerable<masterDDODto>> getmasterDDO(bool isActive,DynamicListQueryParameters dynamicListQueryParameters);
         Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode();

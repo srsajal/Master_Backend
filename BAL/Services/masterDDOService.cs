@@ -127,6 +127,23 @@ namespace master.BAL.Services
             }*/
             return true;
         }
+        public async Task<bool> restoreMasterDdo(int id)
+        {
+            var toRestoreStudent = await _masterDDORepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _masterDDORepository.update(toRestoreStudent);
+            _masterDDORepository.saveChangesManage();
+
+            /*var toDeleteStudent = await _masterDDORepository.GetByIdAsync(id);
+            if (toDeleteStudent != null)
+            {
+                _masterDDORepository.delete(toDeleteStudent);
+                await _masterDDORepository.saveChangesAsync();
+            }*/
+            return true;
+        }
         public async Task<masterDDODto> getStudentById(int id)
         {
             //return (await _masterDDORepository.GetByIdAsync(id));
