@@ -19,7 +19,7 @@ namespace master.Controllers
             _masterSubDetailHeadService = masterSubDetailHeadService;
         }
         [HttpPost("GetMasterSubDetailHead")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterSubDetailHeadDto>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterSubDetailHeadDto>>>>> GetStudent([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<masterSubDetailHeadDto>>> response = new();
             try
@@ -56,8 +56,8 @@ namespace master.Controllers
                         IsSortable=true,
                     }
                 },
-                    Data = await _masterSubDetailHeadService.getSubDetailHead(dynamicListQueryParameters),
-                    DataCount = await _masterSubDetailHeadService.CountSubDetailHead(dynamicListQueryParameters)
+                    Data = await _masterSubDetailHeadService.getSubDetailHead(isActive, dynamicListQueryParameters),
+                    DataCount = await _masterSubDetailHeadService.CountSubDetailHead(isActive, dynamicListQueryParameters)
                 };
                 response.result = result;
             }

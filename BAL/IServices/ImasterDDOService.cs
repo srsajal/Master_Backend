@@ -1,6 +1,7 @@
 ﻿using master.DAL.Entity;
 using master.Dto;
 using master.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
 namespace master.BAL.IServices
@@ -17,6 +18,6 @@ namespace master.BAL.IServices
         Task<IEnumerable<masterDDODto>> getmasterDDO(bool isActive,DynamicListQueryParameters dynamicListQueryParameters);
         Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode();
         //int CountWithCondition(List<FilterParameter> dynamicFilters);
-        Task<int> CountMasterDDO(DynamicListQueryParameters dynamicListQueryParameters);
+        Task<int> CountMasterDDO([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
     }
 }
