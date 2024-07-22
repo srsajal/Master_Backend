@@ -5,6 +5,7 @@ using master.DAL.IRepository;
 using master.DAL.Repository;
 using master.Dto;
 using master.Models;
+using Microsoft.AspNetCore.Mvc;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using System.Linq.Expressions;
 
@@ -26,20 +27,6 @@ namespace master.BAL.Services
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-            /*dynamicListQueryParameters.filterParameters = new List<FilterParameter>();
-            dynamicListQueryParameters?.filterParameters.Add(new FilterParameter
-            {
-                Field = "IsActive",
-                Value = "true",
-                Operator = "equals"
-            });*/
-            /*dynamicListQueryParameters.filterParameters = new List<FilterParameter>();
-            dynamicListQueryParameters?.filterParameters.Add(new FilterParameter
-            {
-                Field = "Address",
-                Value = "Raiganj",
-                Operator = "equals"
-            });*/
             IEnumerable<masterDDODto> StudentFormSajalResult = await _masterDDORepository.GetSelectedColumnByConditionAsync(entity=>entity.IsActive==isActive, entity => new masterDDODto
             {
                 Id = entity.Id,
@@ -166,10 +153,10 @@ namespace master.BAL.Services
 
         }*/
 
-        public async Task<int> CountMasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountMasterDDO(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<Ddo, bool>> condition = d => (bool)d.IsActive; // Default condition if no specific condition is required
-            return _masterDDORepository.CountWithCondition(entity=>entity.IsActive==true, dynamicListQueryParameters.filterParameters);
+            //Expression<Func<Ddo, bool>> condition = d => true; // Default condition if no specific condition is required
+            return _masterDDORepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);
         }
     }
 }

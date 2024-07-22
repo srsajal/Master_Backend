@@ -13,12 +13,14 @@ namespace master.Controllers
     public class MasterDepartmentController : ControllerBase
     {
         ImasterDepartmentService _imasterDepartmentService;
+        private object isActive;
+
         public MasterDepartmentController(ImasterDepartmentService imasterDepartmentService)
         {
             _imasterDepartmentService = imasterDepartmentService;
         }
         [HttpPost("GetMasterDepartment")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterDepartmentDto>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterDepartmentDto>>>>> GetDepartment([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<masterDepartmentDto>>> response = new();
             try
@@ -100,7 +102,7 @@ namespace master.Controllers
                         IsSortable=true,
                     }
                 },
-                    Data = await _imasterDepartmentService.getmasterDepartment(dynamicListQueryParameters),
+                    Data = await _imasterDepartmentService.getmasterDepartment(isActive,dynamicListQueryParameters),
                     DataCount = await _imasterDepartmentService.CountMasterDepartment(dynamicListQueryParameters)
                 };
                 response.result = result;
