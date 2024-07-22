@@ -16,11 +16,11 @@ namespace master.Controllers
         IMasterManegmentService _imasterDDOService;
         public masterMajorHeadController(IMasterManegmentService es)
         {
-            _imasterDDOService = es;    
-            
+            _imasterDDOService = es;
+
         }
         [HttpPost("GetMasterMAJORHEAD")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>>>> GetStudent([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>> response = new();
             try
@@ -51,7 +51,7 @@ namespace master.Controllers
                     },
 
                 },
-                    Data = await _imasterDDOService.GetMastermajorhead(dynamicListQueryParameters),
+                    Data = await _imasterDDOService.GetMastermajorhead(isActive, dynamicListQueryParameters),
                     DataCount = await _imasterDDOService.CountMasterDDO(dynamicListQueryParameters)
                 };
                 response.result = result;
@@ -101,6 +101,42 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("CheckMasterMAJORHEADCode/{code}")]
+        public async Task<bool> CheckMasterMAJORHEADCode(string code)
+        {
+            try
+            {
+                // Check if the Code exists
+                bool codeExists = await _imasterDDOService.MasterMAJORHEADExistsByCode(code);
+
+                if (codeExists)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("GetAllMasterMAJORHEADs")]
+        public async Task<IActionResult> GetAllMasterMAJORHEADs()
+        {
+            try
+            {
+                var masterMajorHeads = await _imasterDDOService.GetAllMasterMAJORHEADs();
+                return Ok(masterMajorHeads);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+    
 
 
 

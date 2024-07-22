@@ -31,5 +31,10 @@ namespace MasterManegmentSystem.DAL.Repository
         {
             return await Task.FromResult(_mContext.MajorHeads.Any(predicate));
         }
+
+        public async Task<IEnumerable<T>> GetAllAsync<T>() where T : class
+        {
+            return await _mContext.Set<T>().ToListAsync();
+        }
     }
 }

@@ -10,5 +10,7 @@
 
         public string? Name { get; set; }
 
-        public int? MinorHeadId { get; set; }    }
+        public int? MinorHeadId { get; set; }
+        public bool? IsActive { get; set; }
+    }
 }

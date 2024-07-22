@@ -38,7 +38,7 @@ namespace master.Controllers
          }*/
 
         [HttpPost("GetMasterSCHEME_HEAD")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterSCHEME_HEADDto>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterSCHEME_HEADDto>>>>> GetStudent([FromQuery] bool isActive ,DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<masterSCHEME_HEADDto>>> response = new();
             try
@@ -85,7 +85,7 @@ namespace master.Controllers
                     },
 
                 },
-                    Data = await _imasterSCHEMEHEADService.getmasterSCHEME_HEAD(dynamicListQueryParameters),
+                    Data = await _imasterSCHEMEHEADService.getmasterSCHEME_HEAD( isActive,dynamicListQueryParameters),
                     DataCount = await _imasterSCHEMEHEADService.CountMasterSCHEME_HEAD(dynamicListQueryParameters)
                 };
                 response.result = result;
