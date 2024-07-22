@@ -84,6 +84,15 @@ namespace master.Controllers
         {
             try
             {
+                // Check if the Code already exists
+                bool exists = await _imasterDDOService.MasterMAJORHEADExistsByCode(s.Code);
+
+                if (exists)
+                {
+                    return BadRequest("Error: The provided code already exists in the database.");
+                }
+
+                // Add the new MasterMAJORHEAD
                 int id = await _imasterDDOService.AddMasterMAJORHEAD(s);
                 return Ok(id);
             }
@@ -92,6 +101,10 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+
+
+
         [HttpPut("UpdateMasterMAJORHEAD")]
         public async Task<IActionResult> UpdateMasterMAJORHEAD(int id, MasterManegmentModel s)
         {
