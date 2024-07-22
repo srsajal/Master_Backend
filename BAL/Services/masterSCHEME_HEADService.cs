@@ -23,12 +23,12 @@ namespace master.BAL.Services
        _masterMinorHeadRepository = masterMinorHeadRepository;
         }
 
-        public async Task<IEnumerable<masterSCHEME_HEADDto>> getmasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<masterSCHEME_HEADDto>> getmasterSCHEME_HEAD(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
            
                 string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
                 string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-                IEnumerable<masterSCHEME_HEADDto> Result = await _masterSCHEME_HEADRepository.GetSelectedColumnByConditionAsync(entity => new masterSCHEME_HEADDto
+                IEnumerable<masterSCHEME_HEADDto> Result = await _masterSCHEME_HEADRepository.GetSelectedColumnByConditionAsync(entity => entity.IsActive == isActive, entity => new masterSCHEME_HEADDto
                 {
                     Id = entity.Id,
 
