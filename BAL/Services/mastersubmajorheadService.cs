@@ -51,10 +51,11 @@ namespace master.BAL.Services
         {
             IEnumerable<MasterManegmentDTO> StudentFormSajalResult = await _masterManegmentRepository.GetSelectedColumnAsync(entity => new MasterManegmentDTO
             { 
+                Id = entity.Id,
                 Code = entity.Code,
                 Name = entity.Name
             });
-            return StudentFormSajalResult;
+            return StudentFormSajalResult.Take(90);
         }   
 
         public async Task<int> AddMasterSubmajorHead(mastersubmajorheadModel model)

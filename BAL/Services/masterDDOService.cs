@@ -22,7 +22,7 @@ namespace master.BAL.Services
             _masterTreasuryRepository = masterTreasuryRepository;
         }
 
-        public async Task<IEnumerable<masterDDODto>> getmasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<masterDDODto>> getmasterDDO(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
@@ -40,7 +40,7 @@ namespace master.BAL.Services
                 Value = "Raiganj",
                 Operator = "equals"
             });*/
-            IEnumerable<masterDDODto> StudentFormSajalResult = await _masterDDORepository.GetSelectedColumnByConditionAsync(entity => new masterDDODto
+            IEnumerable<masterDDODto> StudentFormSajalResult = await _masterDDORepository.GetSelectedColumnByConditionAsync(entity=>entity.IsActive==isActive, entity => new masterDDODto
             {
                 Id = entity.Id,
                 TreasuryCode = entity.TreasuryCode,
@@ -168,8 +168,8 @@ namespace master.BAL.Services
 
         public async Task<int> CountMasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<Ddo, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterDDORepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            Expression<Func<Ddo, bool>> condition = d => (bool)d.IsActive; // Default condition if no specific condition is required
+            return _masterDDORepository.CountWithCondition(entity=>entity.IsActive==true, dynamicListQueryParameters.filterParameters);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace master.Controllers
         }*/
 
         [HttpPost("GetMasterDdo")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterDDODto>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterDDODto>>>>> GetStudent([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<masterDDODto>>> response = new();
             try
@@ -95,7 +95,7 @@ namespace master.Controllers
                         IsSortable=true,
                     }
                 },
-                    Data = await _imasterDDOService.getmasterDDO(dynamicListQueryParameters),
+                    Data = await _imasterDDOService.getmasterDDO(isActive ,dynamicListQueryParameters),
                     DataCount = await _imasterDDOService.CountMasterDDO(dynamicListQueryParameters)
                 };
                 response.result = result;
