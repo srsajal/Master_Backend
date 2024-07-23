@@ -45,6 +45,9 @@ public partial class Department
     [StringLength(100)]
     public string? Email { get; set; }
 
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
+
     public virtual ICollection<DemandMajorMapping> DemandMajorMappings { get; set; } = new List<DemandMajorMapping>();
 
     public virtual ICollection<SchemeHead> SchemeHeads { get; set; } = new List<SchemeHead>();

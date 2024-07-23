@@ -18,4 +18,7 @@ public partial class Level
 
     [Column("code")]
     public short? Code { get; set; }
+
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
 }

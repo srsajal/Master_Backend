@@ -5,6 +5,7 @@ using master.DAL.IRepository;
 using master.DAL.Repository;
 using master.Dto;
 using master.Models;
+using Microsoft.AspNetCore.Mvc;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using System.Linq.Expressions;
 
@@ -22,11 +23,11 @@ namespace master.BAL.Services
             _masterTreasuryRepository = masterTreasuryRepository;
         }
 
-        public async Task<IEnumerable<masterDDODto>> getmasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<masterDDODto>> getmasterDDO(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-            IEnumerable<masterDDODto> StudentFormSajalResult = await _masterDDORepository.GetSelectedColumnByConditionAsync(entity => new masterDDODto
+            IEnumerable<masterDDODto> StudentFormSajalResult = await _masterDDORepository.GetSelectedColumnByConditionAsync(entity=>entity.IsActive==isActive, entity => new masterDDODto
             {
                 Id = entity.Id,
                 TreasuryCode = entity.TreasuryCode,
@@ -35,7 +36,7 @@ namespace master.BAL.Services
                 Designation = entity.Designation,
                 //DesignationMstld = entity.DesignationMstId,
                 Address = entity.Address,
-                Phone = entity.Phone
+                Phone = entity.Phone,
             },
             dynamicListQueryParameters.PageIndex,
             dynamicListQueryParameters.PageSize,
@@ -112,11 +113,35 @@ namespace master.BAL.Services
         public async Task<bool> deleteStudent(int id)
         {
             var toDeleteStudent = await _masterDDORepository.GetByIdAsync(id);
+
+            toDeleteStudent.IsActive = false;
+            
+            _masterDDORepository.update(toDeleteStudent);
+            _masterDDORepository.saveChangesManage();
+
+            /*var toDeleteStudent = await _masterDDORepository.GetByIdAsync(id);
             if (toDeleteStudent != null)
             {
                 _masterDDORepository.delete(toDeleteStudent);
                 await _masterDDORepository.saveChangesAsync();
-            }
+            }*/
+            return true;
+        }
+        public async Task<bool> restoreMasterDdo(int id)
+        {
+            var toRestoreStudent = await _masterDDORepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _masterDDORepository.update(toRestoreStudent);
+            _masterDDORepository.saveChangesManage();
+
+            /*var toDeleteStudent = await _masterDDORepository.GetByIdAsync(id);
+            if (toDeleteStudent != null)
+            {
+                _masterDDORepository.delete(toDeleteStudent);
+                await _masterDDORepository.saveChangesAsync();
+            }*/
             return true;
         }
         public async Task<masterDDODto> getStudentById(int id)
@@ -145,10 +170,10 @@ namespace master.BAL.Services
 
         }*/
 
-        public async Task<int> CountMasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountMasterDDO(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<Ddo, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterDDORepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            //Expression<Func<Ddo, bool>> condition = d => true; // Default condition if no specific condition is required
+            return _masterDDORepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);
         }
     }
 }

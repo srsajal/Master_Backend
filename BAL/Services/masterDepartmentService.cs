@@ -17,11 +17,11 @@ namespace master.BAL.Services
             _mapper = mapper;
             _masterDepartmentRepository = masterDepartmentRepository;
         }
-        public async Task<IEnumerable<masterDepartmentDto>> getmasterDepartment(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<masterDepartmentDto>> getmasterDepartment(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "DESC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-            IEnumerable<masterDepartmentDto> masterdept = await _masterDepartmentRepository.GetSelectedColumnByConditionAsync(entity => new masterDepartmentDto
+            IEnumerable<masterDepartmentDto> masterdept = await _masterDepartmentRepository.GetSelectedColumnByConditionAsync(entity => entity.IsActive == isActive, entity => new masterDepartmentDto
             {
                 Id = entity.Id,
                 Code = entity.Code,
@@ -92,11 +92,9 @@ namespace master.BAL.Services
         public async Task<bool> deleteDepartment(short id)
         {
             var toDeleteDepartment = await _masterDepartmentRepository.GetByIdAsync(id);
-            if (toDeleteDepartment != null)
-            {
-                _masterDepartmentRepository.delete(toDeleteDepartment);
+            toDeleteDepartment.IsActive = false;
+                _masterDepartmentRepository.update(toDeleteDepartment);
                 await _masterDepartmentRepository.saveChangesAsync();
-            }
             return true;
         }
         public async Task<Department> getDepartmentById(short id)

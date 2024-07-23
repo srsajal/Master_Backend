@@ -51,6 +51,7 @@ namespace master.BAL.Services
         {
             IEnumerable<MasterManegmentDTO> StudentFormSajalResult = await _masterManegmentRepository.GetSelectedColumnAsync(entity => new MasterManegmentDTO
             { 
+                Id = entity.Id,
                 Code = entity.Code,
                 Name = entity.Name
             });
@@ -71,8 +72,11 @@ namespace master.BAL.Services
             SubMajorHead updatedStudent = await _mastersubmajorheadRepository.GetByIdAsync(id);
 
             if (updatedStudent == null) return false;
+            updatedStudent.Code = model.Code;
+            updatedStudent.Name = model.Name;   
+            updatedStudent.MajorHeadId = model.MajorHeadId;
 
-            _mapper.Map(model, updatedStudent);
+
 
             _mastersubmajorheadRepository.update(updatedStudent);
             await _mastersubmajorheadRepository.saveChangesAsync();

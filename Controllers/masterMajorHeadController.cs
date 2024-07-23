@@ -16,11 +16,11 @@ namespace master.Controllers
         IMasterManegmentService _imasterDDOService;
         public masterMajorHeadController(IMasterManegmentService es)
         {
-            _imasterDDOService = es;    
-            
+            _imasterDDOService = es;
+
         }
         [HttpPost("GetMasterMAJORHEAD")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>>>> GetStudent([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>> response = new();
             try
@@ -51,7 +51,7 @@ namespace master.Controllers
                     },
 
                 },
-                    Data = await _imasterDDOService.GetMastermajorhead(dynamicListQueryParameters),
+                    Data = await _imasterDDOService.GetMastermajorhead(isActive, dynamicListQueryParameters),
                     DataCount = await _imasterDDOService.CountMasterDDO(dynamicListQueryParameters)
                 };
                 response.result = result;
@@ -65,7 +65,7 @@ namespace master.Controllers
         }
 
         [HttpGet("GetMasterMAJORHEADById")]
-        public async Task<IActionResult> GetMasterMAJORHEADById(short id)
+        public async Task<IActionResult> GetMasterMAJORHEADById(int id)
         {
             try
             {
@@ -84,6 +84,15 @@ namespace master.Controllers
         {
             try
             {
+                // Check if the Code already exists
+                bool exists = await _imasterDDOService.MasterMAJORHEADExistsByCode(s.Code);
+
+                if (exists)
+                {
+                    return BadRequest("Error: The provided code already exists in the database.");
+                }
+
+                // Add the new MasterMAJORHEAD
                 int id = await _imasterDDOService.AddMasterMAJORHEAD(s);
                 return Ok(id);
             }
@@ -92,8 +101,48 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("CheckMasterMAJORHEADCode/{code}")]
+        public async Task<bool> CheckMasterMAJORHEADCode(string code)
+        {
+            try
+            {
+                // Check if the Code exists
+                bool codeExists = await _imasterDDOService.MasterMAJORHEADExistsByCode(code);
+
+                if (codeExists)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("GetAllMasterMAJORHEADs")]
+        public async Task<IActionResult> GetAllMasterMAJORHEADs()
+        {
+            try
+            {
+                var masterMajorHeads = await _imasterDDOService.GetAllMasterMAJORHEADs();
+                return Ok(masterMajorHeads);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+    
+
+
+
+
         [HttpPut("UpdateMasterMAJORHEAD")]
-        public async Task<IActionResult> UpdateMasterMAJORHEAD(short id, MasterManegmentModel s)
+        public async Task<IActionResult> UpdateMasterMAJORHEAD(int id, MasterManegmentModel s)
         {
             try
             {
@@ -111,7 +160,7 @@ namespace master.Controllers
         }
 
         [HttpDelete("DeleteMasterMAJORHEAD")]
-        public async Task<IActionResult> DeleteMasterMAJORHEAD(short id)
+        public async Task<IActionResult> DeleteMasterMAJORHEAD(int id)
         {
             try
             {

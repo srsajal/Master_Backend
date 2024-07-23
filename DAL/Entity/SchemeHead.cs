@@ -28,6 +28,9 @@ public partial class SchemeHead
     [Column("minor_head_id")]
     public int? MinorHeadId { get; set; }
 
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
+
     public virtual Department DemandCodeNavigation { get; set; } = null!;
 
     [ForeignKey("MinorHeadId")]

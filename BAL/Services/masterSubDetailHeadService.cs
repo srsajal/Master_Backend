@@ -20,11 +20,11 @@ namespace master.BAL.Services
             _mapper = mapper;
             _masterDetailHeadRepository = masterDetailHeadRepository;
         }
-        public async Task<IEnumerable<masterSubDetailHeadDto>> getSubDetailHead(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<masterSubDetailHeadDto>> getSubDetailHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-            IEnumerable<masterSubDetailHeadDto> StudentFormSajalResult = await _masterSubDetailHeadRepository.GetSelectedColumnByConditionAsync(entity => new masterSubDetailHeadDto
+            IEnumerable<masterSubDetailHeadDto> StudentFormSajalResult = await _masterSubDetailHeadRepository.GetSelectedColumnByConditionAsync(entity => entity.IsActive == isActive, entity => new masterSubDetailHeadDto
             {
                 Id = entity.Id,
                 Code = entity.Code,
@@ -93,11 +93,10 @@ namespace master.BAL.Services
         public async Task<bool> deleteSubDetailHead(short id)
         {
             var toDeleteStudent = await _masterSubDetailHeadRepository.GetByIdAsync(id);
-            if (toDeleteStudent != null)
-            {
-                _masterSubDetailHeadRepository.delete(toDeleteStudent);
-                await _masterSubDetailHeadRepository.saveChangesAsync();
-            }
+
+            toDeleteStudent.IsActive = false;
+            _masterSubDetailHeadRepository.update(toDeleteStudent);
+            await _masterSubDetailHeadRepository.saveChangesAsync();
             return true;
         }
         public async Task<masterSubDetailHeadDto> getSubDetailHeadById(short id)
@@ -126,10 +125,9 @@ namespace master.BAL.Services
 
         }*/
 
-        public async Task<int> CountSubDetailHead(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountSubDetailHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<SubDetailHead, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterSubDetailHeadRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            return _masterSubDetailHeadRepository.CountWithCondition(entity => entity.IsActive == isActive,  dynamicListQueryParameters.filterParameters);
         }
     }
 }

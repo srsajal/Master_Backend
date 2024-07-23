@@ -16,4 +16,7 @@ public partial class Designation
     [Column("name")]
     [StringLength(300)]
     public string Name { get; set; } = null!;
+
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
 }

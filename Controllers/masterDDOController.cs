@@ -40,7 +40,7 @@ namespace master.Controllers
         }*/
 
         [HttpPost("GetMasterDdo")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterDDODto>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterDDODto>>>>> GetStudent([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<masterDDODto>>> response = new();
             try
@@ -95,8 +95,8 @@ namespace master.Controllers
                         IsSortable=true,
                     }
                 },
-                    Data = await _imasterDDOService.getmasterDDO(dynamicListQueryParameters),
-                    DataCount = await _imasterDDOService.CountMasterDDO(dynamicListQueryParameters)
+                    Data = await _imasterDDOService.getmasterDDO(isActive ,dynamicListQueryParameters),
+                    DataCount = await _imasterDDOService.CountMasterDDO(isActive,dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -187,6 +187,23 @@ namespace master.Controllers
             try
             {
                 await _imasterDDOService.deleteStudent(id);
+                return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpDelete("RestoreMasterDdo")]
+        public async Task<IActionResult> RestoreMasterDdo(int id)
+        {
+            try
+            {
+                await _imasterDDOService.restoreMasterDdo(id);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)

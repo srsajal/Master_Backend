@@ -24,6 +24,9 @@ public partial class SubDetailHead
     [Column("detail_head_id")]
     public short? DetailHeadId { get; set; }
 
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
+
     [ForeignKey("DetailHeadId")]
     [InverseProperty("SubDetailHeads")]
     public virtual DetailHead? DetailHead { get; set; }
