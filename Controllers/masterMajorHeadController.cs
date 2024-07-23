@@ -176,7 +176,7 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        [HttpPost("CountMasterDdo")]
+        [HttpPost("CountMasterMajorHead")]
         public async Task<IActionResult> CountMasterDdo([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             try

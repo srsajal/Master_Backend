@@ -94,11 +94,9 @@ namespace master.BAL.Services
         public async Task<bool> deleteStudent(int id)
         {
             var toDeleteStudent = await _masterSCHEME_HEADRepository.GetByIdAsync(id);
-            if (toDeleteStudent != null)
-            {
-                _masterSCHEME_HEADRepository.delete(toDeleteStudent);
+            toDeleteStudent.IsActive = false;
+                _masterSCHEME_HEADRepository.update(toDeleteStudent);
                 await _masterSCHEME_HEADRepository.saveChangesAsync();
-            }
             return true;
         }
         public async Task<SchemeHead> getStudentById(int id)
