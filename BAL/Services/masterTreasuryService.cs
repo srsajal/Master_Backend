@@ -22,32 +22,7 @@ namespace master.BAL.Services
 
         public async Task<IEnumerable<masterTresuryDTOs>> getmasterTreasury(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            /*          try
-                      {
-                          string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
-                          string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-                          IEnumerable<masterTresuryDTOs> StudentFormSajalResult = await _masterTreasuryRepository.GetSelectedColumnByConditionAsync(entity => new masterTresuryDTOs
-                          {
-                              Id = entity.Id,
-                              DistrictName = entity.DistrictName,
-                              DistrictCode = entity.DistrictCode,
-                              Code = entity.Code,
-                              Name = entity.Name
-
-                          },
-                          dynamicListQueryParameters.PageIndex,
-                          dynamicListQueryParameters.PageSize,
-                          dynamicListQueryParameters.filterParameters,
-                          sortField,
-                          sortOrder
-
-                          );
-                          return StudentFormSajalResult;
-                      }
-                      catch
-                      {
-                          throw;
-                      }*/
+          
 
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
@@ -68,21 +43,10 @@ namespace master.BAL.Services
             );
             return StudentFormSajalResult;
         }
-        /*public async Task<List<Ddo>> getstudents()
-        {
-            try
-            {
-                return (await _masterDDORepository.get()).ToList();
-            }
-            catch
-            {
-                throw;
-            }
-        }*/
+
         public async Task<int> addStudent(masterTreasuryModel s)
         {
-            try
-            {
+            
                 Treasury? newTreasury = new Treasury();
                 newTreasury = _mapper.Map<Treasury>(s);
                 _masterTreasuryRepository.add(newTreasury);
@@ -90,22 +54,13 @@ namespace master.BAL.Services
 
 
                 return newTreasury.Id;
-            }
-            catch
-            {
-                throw;
-            }
+            
+           
         }
         public async Task<bool> updateStudent(short id, masterTreasuryModel s)
         {
             var updatedstudent = await _masterTreasuryRepository.GetByIdAsync(id);
 
-            //repository.Detach(updatedstudent);
-            //updatedstudent.Id = id;
-            //0updatedstudent = _mapper.Map<StudentFormSajal>(s);
-            /*updatedstudent = _mapper.Map(s, updatedstudent);*/
-            //updatedstudent.Id = id;
-            /*updatedstudent.CreatedAt = DateTime.Now;*/
 
             updatedstudent.DistrictName = s.DistrictName;
             updatedstudent.DistrictCode = s.DistrictCode;
@@ -164,19 +119,23 @@ namespace master.BAL.Services
             }*/
             return true;
         }
-        public async Task<Treasury> getStudentById(short id)
+        public async Task<masterTresuryDTOs> getStudentById(short id)
         {
-            return (await _masterTreasuryRepository.GetByIdAsync(id));
+            //return (await _masterTreasuryRepository.GetByIdAsync(id));
+            masterTresuryDTOs StudentFormSajalResult = await _masterTreasuryRepository.GetSelectedIdColumnAsync(id, entity => new masterTresuryDTOs
+            {
+                Id = entity.Id,
+                DistrictName = entity.DistrictName,
+                DistrictCode = entity.DistrictCode,
+              
+                Code = entity.Code,
+                Name = entity.Name,
+                IsActive = entity.IsActive,
+            });
+            return StudentFormSajalResult;
         }
 
 
-
-
-      /*  public async Task<int> CountMasterTreasury(DynamicListQueryParameters dynamicListQueryParameters)
-        {
-            Expression<Func<Treasury, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterTreasuryRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
-        }*/
 
         public async Task<int> CountMasterTreasury(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {

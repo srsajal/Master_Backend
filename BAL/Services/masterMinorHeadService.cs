@@ -11,13 +11,15 @@ namespace master.BAL.Services
 {
     public class masterMinorHeadService : ImasterMinorHeadService
     {
+        ImastersubmajorheadRepository _mastersubmajorheadRepository;
         ImasterMinorHeadRepository _masterMinorHeadRepository;
         IMapper _mapper;
-        public masterMinorHeadService(IMapper mapper, ImasterMinorHeadRepository masterMinorHeadRepository)
+        public masterMinorHeadService(IMapper mapper, ImasterMinorHeadRepository masterMinorHeadRepository,ImastersubmajorheadRepository mastersubmajorheadRepository)
         {
             _mapper = mapper;
             _masterMinorHeadRepository = masterMinorHeadRepository;
-        }
+            _mastersubmajorheadRepository = mastersubmajorheadRepository;
+        }   
         public async Task<IEnumerable<masterMinorHeadDto>> getmasterMinorHead(DynamicListQueryParameters dynamicListQueryParameters)
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "DESC";
@@ -42,7 +44,7 @@ namespace master.BAL.Services
 
        public async Task<IEnumerable<SubMajorHeadToMinorHeadDTO>> getSubMajorHeadCode()
         {
-            IEnumerable<SubMajorHeadToMinorHeadDTO> StudentFormSajalResult = await _masterMinorHeadRepository.GetSelectedColumnAsync(entity => new SubMajorHeadToMinorHeadDTO
+            IEnumerable<SubMajorHeadToMinorHeadDTO> StudentFormSajalResult = await _mastersubmajorheadRepository.GetSelectedColumnAsync(entity => new SubMajorHeadToMinorHeadDTO
             {
                 Code = entity.Code,
                 Name = entity.Name

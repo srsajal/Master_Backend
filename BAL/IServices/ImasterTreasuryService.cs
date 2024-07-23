@@ -11,12 +11,8 @@ namespace master.BAL.IServices
         Task<bool> updateStudent(short id, masterTreasuryModel s);
         Task<bool> deleteStudent(short TreasuryId);
         Task<bool> restoreMasterTreasury(short TreasuryId);
-        Task<Treasury> getStudentById(short id);
-
-      
-        Task<IEnumerable<masterTresuryDTOs>> getmasterTreasury(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
-        //int CountWithCondition(List<FilterParameter> dynamicFilters);
-
+        Task<masterTresuryDTOs> getStudentById(short id);
+        Task<IEnumerable<masterTresuryDTOs>> getmasterTreasury(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);   
         Task<int> CountMasterTreasury([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
        
     }
