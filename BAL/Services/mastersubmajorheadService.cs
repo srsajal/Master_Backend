@@ -72,8 +72,11 @@ namespace master.BAL.Services
             SubMajorHead updatedStudent = await _mastersubmajorheadRepository.GetByIdAsync(id);
 
             if (updatedStudent == null) return false;
+            updatedStudent.Code = model.Code;
+            updatedStudent.Name = model.Name;   
+            updatedStudent.MajorHeadId = model.MajorHeadId;
 
-            _mapper.Map(model, updatedStudent);
+
 
             _mastersubmajorheadRepository.update(updatedStudent);
             await _mastersubmajorheadRepository.saveChangesAsync();
