@@ -232,5 +232,23 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpGet("CountAllMaster")]
+        public async Task<IActionResult> CountMaster()
+        {
+            try
+            {
+                var DataCount = await _imasterDDOService.CountAllMaster();
+                return Ok(DataCount);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
     }
 }

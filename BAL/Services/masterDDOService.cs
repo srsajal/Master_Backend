@@ -5,6 +5,7 @@ using master.DAL.IRepository;
 using master.DAL.Repository;
 using master.Dto;
 using master.Models;
+using MasterManegmentSystem.DAL.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using System.Linq.Expressions;
@@ -14,13 +15,31 @@ namespace master.BAL.Services
     public class masterDDOService : ImasterDDOService
     {
         ImasterDDORepository _masterDDORepository;
+        ImasterDetailHeadRepository _masterDetailHeadRepository;
+        ImasterSubDetailHeadRepository _masterSubDetailHeadRepository;
+        ImasterDepartmentRepository _masterDepartmentRepository;
+        IMasterManegmentRepository _masterManegmentRepository;
+        ImasterSCHEME_HEADRepository _masterSchemeHeadRepository;
         ImasterTreasuryRepository _masterTreasuryRepository;
         IMapper _mapper;
-        public masterDDOService(IMapper mapper, ImasterDDORepository masterDDORepository, ImasterTreasuryRepository masterTreasuryRepository)
+        public masterDDOService(IMapper mapper, ImasterDDORepository masterDDORepository,
+            ImasterDetailHeadRepository masterDetailHeadRepository,
+            ImasterSubDetailHeadRepository masterSubDetailHeadRepository,
+            ImasterDepartmentRepository masterDepartmentRepository,
+            IMasterManegmentRepository masterManegmentRepository,
+            ImasterSCHEME_HEADRepository masterSchemeHeadRepository,
+            ImasterTreasuryRepository masterTreasuryRepository
+            )
         {
             _mapper = mapper;
             _masterDDORepository = masterDDORepository;
+            _masterDetailHeadRepository = masterDetailHeadRepository;
+            _masterSubDetailHeadRepository = masterSubDetailHeadRepository;
+            _masterDepartmentRepository = masterDepartmentRepository;
+            _masterManegmentRepository = masterManegmentRepository;
+            _masterSchemeHeadRepository = masterSchemeHeadRepository;
             _masterTreasuryRepository = masterTreasuryRepository;
+
         }
 
         public async Task<IEnumerable<masterDDODto>> getmasterDDO(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
@@ -174,6 +193,34 @@ namespace master.BAL.Services
         {
             //Expression<Func<Ddo, bool>> condition = d => true; // Default condition if no specific condition is required
             return _masterDDORepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);
+        }
+        public async Task<AllMasterDTO> CountAllMaster()
+        {
+            AllMasterDTO allMasterCount = new AllMasterDTO
+            {
+                TotalActiveDdo = _masterDDORepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveDdo = _masterDDORepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveDetailHead = _masterDetailHeadRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveDetailHead = _masterDetailHeadRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveSubDetailHead = _masterSubDetailHeadRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveSubDetailHead = _masterSubDetailHeadRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveDepartment = _masterDepartmentRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveDepartment = _masterDepartmentRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveMajorHead = _masterManegmentRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveMajorHead = _masterManegmentRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveSchemeHead = _masterSchemeHeadRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveSchemeHead = _masterSchemeHeadRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveTreasury = _masterTreasuryRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveTreasury = _masterTreasuryRepository.CountWithCondition(entity => entity.IsActive == false),
+            };
+
+            return allMasterCount;
         }
     }
 }

@@ -180,7 +180,6 @@ namespace master.BAL.Services
 
         public async Task<int> CountMasterTreasury(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            //Expression<Func<Ddo, bool>> condition = d => true; // Default condition if no specific condition is required
             return _masterTreasuryRepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);
         }
     }

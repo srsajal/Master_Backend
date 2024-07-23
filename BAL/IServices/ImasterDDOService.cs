@@ -20,5 +20,6 @@ namespace master.BAL.IServices
         Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode();
         //int CountWithCondition(List<FilterParameter> dynamicFilters);
         Task<int> CountMasterDDO([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
+        Task <AllMasterDTO> CountAllMaster();
     }
 }
