@@ -99,6 +99,16 @@ namespace master.BAL.Services
             await _masterSubDetailHeadRepository.saveChangesAsync();
             return true;
         }
+        public async Task<bool> restoreMasterSubDetailHead(int id)
+        {
+            var toRestoreStudent = await _masterSubDetailHeadRepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _masterSubDetailHeadRepository.update(toRestoreStudent);
+            _masterSubDetailHeadRepository.saveChangesManage();
+            return true;
+        }
         public async Task<masterSubDetailHeadDto> getSubDetailHeadById(short id)
         {
             //return (await _masterDDORepository.GetByIdAsync(id));

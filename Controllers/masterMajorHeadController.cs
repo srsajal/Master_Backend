@@ -13,10 +13,10 @@ namespace master.Controllers
     [ApiController]
     public class masterMajorHeadController : ControllerBase
     {
-        IMasterManegmentService _imasterDDOService;
+        IMasterManegmentService _imasterManagementService;
         public masterMajorHeadController(IMasterManegmentService es)
         {
-            _imasterDDOService = es;
+            _imasterManagementService = es;
 
         }
         [HttpPost("GetMasterMAJORHEAD")]
@@ -51,8 +51,8 @@ namespace master.Controllers
                     },
 
                 },
-                    Data = await _imasterDDOService.GetMastermajorhead(isActive, dynamicListQueryParameters),
-                    DataCount = await _imasterDDOService.CountMasterDDO(dynamicListQueryParameters)
+                    Data = await _imasterManagementService.GetMastermajorhead(isActive, dynamicListQueryParameters),
+                    DataCount = await _imasterManagementService.CountMasterMajorHead(isActive, dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -69,7 +69,7 @@ namespace master.Controllers
         {
             try
             {
-                var student = await _imasterDDOService.GetMastermajorheadById(id);
+                var student = await _imasterManagementService.GetMastermajorheadById(id);
                 return Ok(student);
             }
             catch (Exception ex)
@@ -85,7 +85,7 @@ namespace master.Controllers
             try
             {
                 // Check if the Code already exists
-                bool exists = await _imasterDDOService.MasterMAJORHEADExistsByCode(s.Code);
+                bool exists = await _imasterManagementService.MasterMAJORHEADExistsByCode(s.Code);
 
                 if (exists)
                 {
@@ -93,7 +93,7 @@ namespace master.Controllers
                 }
 
                 // Add the new MasterMAJORHEAD
-                int id = await _imasterDDOService.AddMasterMAJORHEAD(s);
+                int id = await _imasterManagementService.AddMasterMAJORHEAD(s);
                 return Ok(id);
             }
             catch (Exception ex)
@@ -108,7 +108,7 @@ namespace master.Controllers
             try
             {
                 // Check if the Code exists
-                bool codeExists = await _imasterDDOService.MasterMAJORHEADExistsByCode(code);
+                bool codeExists = await _imasterManagementService.MasterMAJORHEADExistsByCode(code);
 
                 if (codeExists)
                 {
@@ -128,7 +128,7 @@ namespace master.Controllers
         {
             try
             {
-                var masterMajorHeads = await _imasterDDOService.GetAllMasterMAJORHEADs();
+                var masterMajorHeads = await _imasterManagementService.GetAllMasterMAJORHEADs();
                 return Ok(masterMajorHeads);
             }
             catch (Exception ex)
@@ -146,7 +146,7 @@ namespace master.Controllers
         {
             try
             {
-                await _imasterDDOService.UpdateMastermajorhead(id, s);
+                await _imasterManagementService.UpdateMastermajorhead(id, s);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)
@@ -164,8 +164,25 @@ namespace master.Controllers
         {
             try
             {
-                await _imasterDDOService.DeleteMastermajorhead(id);
+                await _imasterManagementService.DeleteMastermajorhead(id);
                 return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpPost("CountMasterDdo")]
+        public async Task<IActionResult> CountMasterDdo([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
+        {
+            try
+            {
+                var DataCount = await _imasterManagementService.CountMasterMajorHead(isActive, dynamicListQueryParameters);
+                return Ok(DataCount);
             }
             catch (ArgumentException ex)
             {

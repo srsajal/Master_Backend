@@ -93,10 +93,9 @@ namespace MasterManegmentSystem.BAL.Services
 
        
 
-        public async Task<int> CountMasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountMasterMajorHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            //Expression<Func<MajorHead, bool>> condition = d => (bool)d.IsActive; // Default condition if no specific condition is required
-            return _masterManegmentRepository.CountWithCondition(entity => entity.IsActive == true, dynamicListQueryParameters.filterParameters);
+            return _masterManegmentRepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);
         }
 
         public Task<MajorHead> GetMastermajorheadById(int id)

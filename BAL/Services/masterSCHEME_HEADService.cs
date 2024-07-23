@@ -115,10 +115,9 @@ namespace master.BAL.Services
 
         }*/
 
-        public async Task<int> CountMasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountMasterSCHEME_HEAD(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<SchemeHead, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterSCHEME_HEADRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            return _masterSCHEME_HEADRepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);
         }
     }
 }

@@ -2,6 +2,7 @@
 using master.BAL.IServices;
 using master.DAL.Entity;
 using master.DAL.IRepository;
+using master.DAL.Repository;
 using master.Dto;
 using master.Models;
 using System.Linq.Expressions;
@@ -111,10 +112,9 @@ namespace master.BAL.Services
 
         }*/
 
-        public async Task<int> CountMasterDepartment(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountMasterDepartment(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<Department, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterDepartmentRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            return _masterDepartmentRepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);
         }
     }
 }

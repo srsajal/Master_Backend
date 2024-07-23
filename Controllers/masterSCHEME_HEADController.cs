@@ -86,7 +86,7 @@ namespace master.Controllers
 
                 },
                     Data = await _imasterSCHEMEHEADService.getmasterSCHEME_HEAD( isActive,dynamicListQueryParameters),
-                    DataCount = await _imasterSCHEMEHEADService.CountMasterSCHEME_HEAD(dynamicListQueryParameters)
+                    DataCount = await _imasterSCHEMEHEADService.CountMasterSCHEME_HEAD(isActive, dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -178,6 +178,23 @@ namespace master.Controllers
             {
                 await _imasterSCHEMEHEADService.deleteStudent(id);
                 return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpPost("CountMasterDdo")]
+        public async Task<IActionResult> CountMasterSchemeHead([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
+        {
+            try
+            {
+                var DataCount = await _imasterSCHEMEHEADService.CountMasterSCHEME_HEAD(isActive, dynamicListQueryParameters);
+                return Ok(DataCount);
             }
             catch (ArgumentException ex)
             {

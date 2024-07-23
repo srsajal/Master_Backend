@@ -1,4 +1,5 @@
 ﻿using master.BAL.IServices;
+using master.BAL.Services;
 using master.Dto;
 using master.Models;
 using masterDDO.Enums;
@@ -103,7 +104,7 @@ namespace master.Controllers
                     }
                 },
                     Data = await _imasterDepartmentService.getmasterDepartment(isActive,dynamicListQueryParameters),
-                    DataCount = await _imasterDepartmentService.CountMasterDepartment(dynamicListQueryParameters)
+                    DataCount = await _imasterDepartmentService.CountMasterDepartment(isActive, dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -180,6 +181,23 @@ namespace master.Controllers
             {
                 await _imasterDepartmentService.deleteDepartment(id);
                 return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpPost("CountMasterDdo")]
+        public async Task<IActionResult> CountMasterDepartment([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
+        {
+            try
+            {
+                var DataCount = await _imasterDepartmentService.CountMasterDepartment(isActive, dynamicListQueryParameters);
+                return Ok(DataCount);
             }
             catch (ArgumentException ex)
             {

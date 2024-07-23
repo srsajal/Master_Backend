@@ -14,6 +14,6 @@ namespace master.BAL.IServices
 
         Task<IEnumerable<SchemeMinorheadfromMINORHEADIdDTO>> getSchemeMinorheadfromMINORHEADId();
         //int CountWithCondition(List<FilterParameter> dynamicFilters);
-        Task<int> CountMasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters);
+        Task<int> CountMasterSCHEME_HEAD(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
     }
 }
