@@ -71,8 +71,9 @@ namespace MasterManegmentSystem.BAL.Services
                 MajorHead updatedStudent = await _masterManegmentRepository.GetByIdAsync(id);
 
                 if (updatedStudent == null) return false;
+            updatedStudent.Code = model.Code;
+            updatedStudent.Name = model.Name;   
 
-                _mapper.Map(model, updatedStudent);
 
                 _masterManegmentRepository.update(updatedStudent);
                 await _masterManegmentRepository.saveChangesAsync();

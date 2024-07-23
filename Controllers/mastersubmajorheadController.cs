@@ -50,7 +50,7 @@ namespace master.Controllers
                     },
                     new ListHeader
                     {
-                        Name="MajorHeadId",
+                        Name="Major Head Id",
                         DataType="text",
                         FieldName ="majorHeadId",
                         FilterField ="MajorHeadId",
