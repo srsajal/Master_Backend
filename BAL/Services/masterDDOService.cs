@@ -30,6 +30,8 @@ namespace master.BAL.Services
             ImasterDepartmentRepository masterDepartmentRepository,
             IMasterManegmentRepository masterManegmentRepository,
             ImasterSCHEME_HEADRepository masterSchemeHeadRepository,
+            ImasterMinorHeadRepository masterMinorHeadRepository,
+            ImastersubmajorheadRepository mastersubmajorheadRepository,
             ImasterTreasuryRepository masterTreasuryRepository
             )
         {
@@ -40,6 +42,8 @@ namespace master.BAL.Services
             _masterDepartmentRepository = masterDepartmentRepository;
             _masterManegmentRepository = masterManegmentRepository;
             _masterSchemeHeadRepository = masterSchemeHeadRepository;
+            _masterMinorHeadRepository = masterMinorHeadRepository;
+            _mastersubmajorheadRepository = mastersubmajorheadRepository;
             _masterTreasuryRepository = masterTreasuryRepository;
 
         }
@@ -226,11 +230,7 @@ namespace master.BAL.Services
 
                 TotalActiveSubMajorHead = _mastersubmajorheadRepository.CountWithCondition(entity => entity.IsActive == true),
                 TotalInactiveSubMajorHead = _mastersubmajorheadRepository.CountWithCondition(entity => entity.IsActive == false),
-
-
             };
-
-
 
             return allMasterCount;
         }
