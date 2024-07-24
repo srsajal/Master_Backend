@@ -81,14 +81,40 @@ namespace master.BAL.Services
 
             return true;
         }
+        /*      public async Task<bool> deleteMinorHead(int id)
+              {
+                  var toDeleteMinorHead = await _masterMinorHeadRepository.GetByIdAsync(id);
+                  if (toDeleteMinorHead != null)
+                  {
+                      _masterMinorHeadRepository.delete(toDeleteMinorHead);
+                      await _masterMinorHeadRepository.saveChangesAsync();
+                  }
+                  return true;
+              }*/
+
         public async Task<bool> deleteMinorHead(int id)
         {
-            var toDeleteMinorHead = await _masterMinorHeadRepository.GetByIdAsync(id);
-            if (toDeleteMinorHead != null)
-            {
-                _masterMinorHeadRepository.delete(toDeleteMinorHead);
-                await _masterMinorHeadRepository.saveChangesAsync();
-            }
+            var toDeleteStudent = await _masterMinorHeadRepository.GetByIdAsync(id);
+
+            toDeleteStudent.IsActive = false;
+
+            _masterMinorHeadRepository.update(toDeleteStudent);
+            _masterMinorHeadRepository.saveChangesManage();
+
+         
+            return true;
+        }
+
+        public async Task<bool> restoreMasterMinorHead(int id)
+        {
+            var toRestoreStudent = await _masterMinorHeadRepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _masterMinorHeadRepository.update(toRestoreStudent);
+            _masterMinorHeadRepository.saveChangesManage();
+
+      
             return true;
         }
         public async Task<MinorHead> getMinorHeadById(int id)

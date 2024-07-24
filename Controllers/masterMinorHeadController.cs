@@ -148,5 +148,23 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpDelete("RestoreMasterMinorHead")]
+        public async Task<IActionResult> restoreMasterMinorHead(int id)
+        {
+            try
+            {
+                await _imasterMinorHeadService.restoreMasterMinorHead(id);
+                return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }
