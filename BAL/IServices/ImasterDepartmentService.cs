@@ -10,6 +10,7 @@ namespace master.BAL.IServices
         Task<int> addDepartment(masterDepartmentModel s);
         Task<bool> updateDepartment(short id, masterDepartmentModel s);
         Task<bool> deleteDepartment(short DepartmentId);
+        Task<bool> restoreMasterDepartment(int studentId);
         Task<Department> getDepartmentById(short id);
         Task<IEnumerable<masterDepartmentDto>> getmasterDepartment(bool isActive,DynamicListQueryParameters dynamicListQueryParameters);
         //int CountWithCondition(List<FilterParameter> dynamicFilters);

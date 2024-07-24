@@ -15,6 +15,7 @@ namespace MasterManegmentSystem.BAL.IServices
         Task<IEnumerable<MasterManegmentModel>> GetAllMasterMAJORHEADs();
         Task<bool> UpdateMastermajorhead(int id, MasterManegmentModel model);
         Task<bool> DeleteMastermajorhead(int id);
+        Task<bool> restoreMasterMajorHead(int studentId);
         Task<MajorHead> GetMastermajorheadById(int id);
         Task<int> CountMasterMajorHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
        

@@ -191,6 +191,23 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpDelete("RestoreMasterDepartment")]
+        public async Task<IActionResult> RestoreMasterDdo(int id)
+        {
+            try
+            {
+                await _imasterDepartmentService.restoreMasterDepartment(id);
+                return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
         [HttpPost("CountMasterDdo")]
         public async Task<IActionResult> CountMasterDepartment([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {

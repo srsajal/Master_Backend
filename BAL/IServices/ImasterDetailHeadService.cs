@@ -8,6 +8,7 @@ namespace master.BAL.IServices
         Task<int> addDetailHead(masterDetailHeadModel s);
         Task<bool> updateDetailHead(short id, masterDetailHeadModel s);
         Task<bool> deleteDetailHead(short studentId);
+        Task<bool> restoreMasterDetailHead(int studentId);
         Task<masterDetailHeadDto> getDetailHeadById(short id);
         Task<IEnumerable<masterDetailHeadDto>> getDetailHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
         //Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode();

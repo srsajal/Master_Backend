@@ -91,8 +91,18 @@ namespace MasterManegmentSystem.BAL.Services
 
                 return true;
         }
+        public async Task<bool> restoreMasterMajorHead(int id)
+        {
+            var toRestoreStudent = await _masterManegmentRepository.GetByIdAsync(id);
 
-       
+            toRestoreStudent.IsActive = true;
+
+            _masterManegmentRepository.update(toRestoreStudent);
+            _masterManegmentRepository.saveChangesManage();
+            return true;
+        }
+
+
 
         public async Task<int> CountMasterMajorHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {

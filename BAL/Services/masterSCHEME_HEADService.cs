@@ -99,6 +99,16 @@ namespace master.BAL.Services
                 await _masterSCHEME_HEADRepository.saveChangesAsync();
             return true;
         }
+        public async Task<bool> restoreMasterSchemeHead(int id)
+        {
+            var toRestoreStudent = await _masterSCHEME_HEADRepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _masterSCHEME_HEADRepository.update(toRestoreStudent);
+            _masterSCHEME_HEADRepository.saveChangesManage();
+            return true;
+        }
         public async Task<SchemeHead> getStudentById(int id)
         {
             return (await _masterSCHEME_HEADRepository.GetByIdAsync(id));

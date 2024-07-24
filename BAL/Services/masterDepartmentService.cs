@@ -98,6 +98,16 @@ namespace master.BAL.Services
                 await _masterDepartmentRepository.saveChangesAsync();
             return true;
         }
+        public async Task<bool> restoreMasterDepartment(int id)
+        {
+            var toRestoreStudent = await _masterDepartmentRepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _masterDepartmentRepository.update(toRestoreStudent);
+            _masterDepartmentRepository.saveChangesManage();
+            return true;
+        }
         public async Task<Department> getDepartmentById(short id)
         {
             return (await _masterDepartmentRepository.GetByIdAsync(id));

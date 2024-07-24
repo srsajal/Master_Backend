@@ -159,7 +159,7 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        [HttpDelete("RestoreMasterDdo")]
+        [HttpDelete("RestoreMasterSubDetailHead")]
         public async Task<IActionResult> RestoreMasterSubDetailHead(int id)
         {
             try
