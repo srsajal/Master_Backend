@@ -152,7 +152,7 @@ namespace master.Controllers
         }
 
         [HttpDelete("RestoreMasterDetailHead")]
-        public async Task<IActionResult> RestoreMasterDdo(int id)
+        public async Task<IActionResult> RestoreMasterDdo(short id)
         {
             try
             {
