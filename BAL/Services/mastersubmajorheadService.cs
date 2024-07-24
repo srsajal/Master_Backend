@@ -85,18 +85,34 @@ namespace master.BAL.Services
             return true;
         }
 
+     
+
         public async Task<bool> DeleteMastersubMajorHead(int id)
         {
-            SubMajorHead student = await _mastersubmajorheadRepository.GetByIdAsync(id);
-            if (student == null) return false;
+            var toDeleteStudent = await _mastersubmajorheadRepository.GetByIdAsync(id);
 
-            _mastersubmajorheadRepository.delete(student);
-            await _mastersubmajorheadRepository.saveChangesAsync();
+            toDeleteStudent.IsActive = false;
 
+            _mastersubmajorheadRepository.update(toDeleteStudent);
+            _mastersubmajorheadRepository.saveChangesManage();
+
+        
             return true;
+
         }
 
+        public async Task<bool> restoreMastersubMajorHead(int id)
+        {
+            var toRestoreStudent = await _mastersubmajorheadRepository.GetByIdAsync(id);
 
+            toRestoreStudent.IsActive = true;
+
+            _mastersubmajorheadRepository.update(toRestoreStudent);
+            _mastersubmajorheadRepository.saveChangesManage();
+
+      
+            return true;
+        }
 
         public async Task<int> CountMastersubmajorhead([FromQuery] bool IsActive, DynamicListQueryParameters dynamicListQueryParameters)
         {

@@ -13,6 +13,7 @@ namespace master.BAL.IServices
         Task<int> AddMasterSubmajorHead(mastersubmajorheadModel model);
         Task<bool> UpdateMastersubMajorHead(int id, mastersubmajorheadModel model);
         Task<bool> DeleteMastersubMajorHead(int id);
+        Task<bool> restoreMastersubMajorHead(int subMajorHeadId);
         Task<SubMajorHead> GetMasterMastersubMajorHeadById(int id);
         Task<IEnumerable<MasterManegmentDTO>> GetMajorHeadcode();
         Task<int> CountMastersubmajorhead([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
