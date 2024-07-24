@@ -27,11 +27,11 @@ namespace master.BAL.Services
             _masterManegmentRepository = masterManegmentRepository;
         }
 
-        public async Task<IEnumerable<mastersubmajorheadDTO>> GetMastersubmajorhead(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<mastersubmajorheadDTO>> GetMastersubmajorhead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-            IEnumerable<mastersubmajorheadDTO> result = await _mastersubmajorheadRepository.GetSelectedColumnByConditionAsync(
+            IEnumerable<mastersubmajorheadDTO> result = await _mastersubmajorheadRepository.GetSelectedColumnByConditionAsync(entity => entity.IsActive == isActive,
                 entity => new mastersubmajorheadDTO
                 {
                     Id = entity.Id,

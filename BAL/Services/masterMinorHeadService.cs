@@ -20,11 +20,11 @@ namespace master.BAL.Services
             _masterMinorHeadRepository = masterMinorHeadRepository;
             _mastersubmajorheadRepository = mastersubmajorheadRepository;
         }   
-        public async Task<IEnumerable<masterMinorHeadDto>> getmasterMinorHead(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<masterMinorHeadDto>> getmasterMinorHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "DESC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-            IEnumerable<masterMinorHeadDto> masterminor = await _masterMinorHeadRepository.GetSelectedColumnByConditionAsync(entity => new masterMinorHeadDto
+            IEnumerable<masterMinorHeadDto> masterminor = await _masterMinorHeadRepository.GetSelectedColumnByConditionAsync(entity => entity.IsActive == isActive, entity => new masterMinorHeadDto
             {
                 Id = entity.Id,
                 Code = entity.Code,

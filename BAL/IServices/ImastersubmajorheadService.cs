@@ -9,7 +9,7 @@ namespace master.BAL.IServices
 {
     public interface ImastersubmajorheadService
     {
-        Task<IEnumerable<mastersubmajorheadDTO>> GetMastersubmajorhead(DynamicListQueryParameters dynamicListQueryParameters);
+        Task<IEnumerable<mastersubmajorheadDTO>> GetMastersubmajorhead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
         Task<int> AddMasterSubmajorHead(mastersubmajorheadModel model);
         Task<bool> UpdateMastersubMajorHead(int id, mastersubmajorheadModel model);
         Task<bool> DeleteMastersubMajorHead(int id);
