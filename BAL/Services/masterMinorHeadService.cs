@@ -106,10 +106,9 @@ namespace master.BAL.Services
         }*/
 
   
-        public async Task<int> CountMasterMinorHead(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountMasterMinorHead(bool IsActive,DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<MinorHead, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterMinorHeadRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            return _masterMinorHeadRepository.CountWithCondition(entity=> entity.IsActive == IsActive, dynamicListQueryParameters.filterParameters);
         }
 
        

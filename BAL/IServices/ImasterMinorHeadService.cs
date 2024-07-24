@@ -2,6 +2,7 @@
 using master.DAL.Entity;
 using master.Dto;
 using master.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace master.BAL.IServices
 {
@@ -14,6 +15,6 @@ namespace master.BAL.IServices
         Task<IEnumerable<masterMinorHeadDto>> getmasterMinorHead(DynamicListQueryParameters dynamicListQueryParameters);
         // int CountWithCondition(List<FilterParameter> dynamicFilters);
         Task<IEnumerable<SubMajorHeadToMinorHeadDTO>> getSubMajorHeadCode();
-        Task<int> CountMasterMinorHead(DynamicListQueryParameters dynamicListQueryParameters);
+        Task<int> CountMasterMinorHead([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
     }
 }

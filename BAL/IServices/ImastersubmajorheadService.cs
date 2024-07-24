@@ -3,6 +3,7 @@ using master.Dto;
 using master.Models;
 using MasterManegmentSystem.Dto;
 using MasterManegmentSystem.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace master.BAL.IServices
 {
@@ -14,6 +15,6 @@ namespace master.BAL.IServices
         Task<bool> DeleteMastersubMajorHead(int id);
         Task<SubMajorHead> GetMasterMastersubMajorHeadById(int id);
         Task<IEnumerable<MasterManegmentDTO>> GetMajorHeadcode();
-        Task<int> CountMastersubmajorhead(DynamicListQueryParameters dynamicListQueryParameters);
+        Task<int> CountMastersubmajorhead([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
     }
 }

@@ -9,6 +9,7 @@ using MasterManegmentSystem.BAL.IServices;
 using MasterManegmentSystem.DAL.IRepository;
 using MasterManegmentSystem.Dto;
 using MasterManegmentSystem.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
 namespace master.BAL.Services
@@ -97,10 +98,9 @@ namespace master.BAL.Services
 
 
 
-        public async Task<int> CountMastersubmajorhead(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountMastersubmajorhead([FromQuery] bool IsActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<SubMajorHead, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _mastersubmajorheadRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            return _mastersubmajorheadRepository.CountWithCondition(entity => entity.IsActive == IsActive, dynamicListQueryParameters.filterParameters);
         }
 
         public Task<SubMajorHead> GetMasterMastersubMajorHeadById(int id)
