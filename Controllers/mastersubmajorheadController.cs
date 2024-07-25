@@ -19,7 +19,7 @@ namespace master.Controllers
             _mastersubmajorheadService = es;
         }
         [HttpPost("GetMastersubmajorhead")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<mastersubmajorheadDTO>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<mastersubmajorheadDTO>>>>> GetStudent([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<mastersubmajorheadDTO>>> response = new();
             try
@@ -59,8 +59,8 @@ namespace master.Controllers
                     },
 
                 },
-                    Data = await _mastersubmajorheadService.GetMastersubmajorhead(dynamicListQueryParameters),
-                    DataCount = await _mastersubmajorheadService.CountMastersubmajorhead(dynamicListQueryParameters)
+                    Data = await _mastersubmajorheadService.GetMastersubmajorhead(isActive, dynamicListQueryParameters),
+                    DataCount = await _mastersubmajorheadService.CountMastersubmajorhead(isActive, dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -138,6 +138,24 @@ namespace master.Controllers
             try
             {
                 await _mastersubmajorheadService.DeleteMastersubMajorHead(id);
+                return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("RestoreMasterSubMajorHead")]
+        public async Task<IActionResult> restoreMastersubMajorHead(int id)
+        {
+            try
+            {
+                await _mastersubmajorheadService.restoreMastersubMajorHead(id);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)

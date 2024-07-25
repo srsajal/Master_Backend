@@ -20,6 +20,8 @@ namespace master.BAL.Services
         ImasterDepartmentRepository _masterDepartmentRepository;
         IMasterManegmentRepository _masterManegmentRepository;
         ImasterSCHEME_HEADRepository _masterSchemeHeadRepository;
+        ImasterMinorHeadRepository _masterMinorHeadRepository;
+        ImastersubmajorheadRepository _mastersubmajorheadRepository;
         ImasterTreasuryRepository _masterTreasuryRepository;
         IMapper _mapper;
         public masterDDOService(IMapper mapper, ImasterDDORepository masterDDORepository,
@@ -28,6 +30,8 @@ namespace master.BAL.Services
             ImasterDepartmentRepository masterDepartmentRepository,
             IMasterManegmentRepository masterManegmentRepository,
             ImasterSCHEME_HEADRepository masterSchemeHeadRepository,
+            ImasterMinorHeadRepository masterMinorHeadRepository,
+            ImastersubmajorheadRepository mastersubmajorheadRepository,
             ImasterTreasuryRepository masterTreasuryRepository
             )
         {
@@ -38,6 +42,8 @@ namespace master.BAL.Services
             _masterDepartmentRepository = masterDepartmentRepository;
             _masterManegmentRepository = masterManegmentRepository;
             _masterSchemeHeadRepository = masterSchemeHeadRepository;
+            _masterMinorHeadRepository = masterMinorHeadRepository;
+            _mastersubmajorheadRepository = mastersubmajorheadRepository;
             _masterTreasuryRepository = masterTreasuryRepository;
 
         }
@@ -218,6 +224,12 @@ namespace master.BAL.Services
 
                 TotalActiveTreasury = _masterTreasuryRepository.CountWithCondition(entity => entity.IsActive == true),
                 TotalInactiveTreasury = _masterTreasuryRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveMinorHead = _masterMinorHeadRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveMinorHead = _masterMinorHeadRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveSubMajorHead = _mastersubmajorheadRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveSubMajorHead = _mastersubmajorheadRepository.CountWithCondition(entity => entity.IsActive == false),
             };
 
             return allMasterCount;

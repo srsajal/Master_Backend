@@ -9,6 +9,7 @@ using MasterManegmentSystem.BAL.IServices;
 using MasterManegmentSystem.DAL.IRepository;
 using MasterManegmentSystem.Dto;
 using MasterManegmentSystem.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
 namespace master.BAL.Services
@@ -26,11 +27,11 @@ namespace master.BAL.Services
             _masterManegmentRepository = masterManegmentRepository;
         }
 
-        public async Task<IEnumerable<mastersubmajorheadDTO>> GetMastersubmajorhead(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<mastersubmajorheadDTO>> GetMastersubmajorhead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-            IEnumerable<mastersubmajorheadDTO> result = await _mastersubmajorheadRepository.GetSelectedColumnByConditionAsync(
+            IEnumerable<mastersubmajorheadDTO> result = await _mastersubmajorheadRepository.GetSelectedColumnByConditionAsync(entity => entity.IsActive == isActive,
                 entity => new mastersubmajorheadDTO
                 {
                     Id = entity.Id,
@@ -84,23 +85,38 @@ namespace master.BAL.Services
             return true;
         }
 
+     
+
         public async Task<bool> DeleteMastersubMajorHead(int id)
         {
-            SubMajorHead student = await _mastersubmajorheadRepository.GetByIdAsync(id);
-            if (student == null) return false;
+            var toDeleteStudent = await _mastersubmajorheadRepository.GetByIdAsync(id);
 
-            _mastersubmajorheadRepository.delete(student);
-            await _mastersubmajorheadRepository.saveChangesAsync();
+            toDeleteStudent.IsActive = false;
 
+            _mastersubmajorheadRepository.update(toDeleteStudent);
+            _mastersubmajorheadRepository.saveChangesManage();
+
+        
+            return true;
+
+        }
+
+        public async Task<bool> restoreMastersubMajorHead(int id)
+        {
+            var toRestoreStudent = await _mastersubmajorheadRepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _mastersubmajorheadRepository.update(toRestoreStudent);
+            _mastersubmajorheadRepository.saveChangesManage();
+
+      
             return true;
         }
 
-
-
-        public async Task<int> CountMastersubmajorhead(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountMastersubmajorhead([FromQuery] bool IsActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<SubMajorHead, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _mastersubmajorheadRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            return _mastersubmajorheadRepository.CountWithCondition(entity => entity.IsActive == IsActive, dynamicListQueryParameters.filterParameters);
         }
 
         public Task<SubMajorHead> GetMasterMastersubMajorHeadById(int id)

@@ -20,7 +20,7 @@ namespace master.Controllers
             _imasterMinorHeadService = imasterMinorHeadService;
         }
         [HttpPost("GetmasterMinorHead")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterMinorHeadDto>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterMinorHeadDto>>>>> GetStudent([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<masterMinorHeadDto>>> response = new();
             try
@@ -57,8 +57,8 @@ namespace master.Controllers
                         IsSortable=true,
                     },
                 },
-                    Data = await _imasterMinorHeadService.getmasterMinorHead(dynamicListQueryParameters),
-                    DataCount = await _imasterMinorHeadService.CountMasterMinorHead(dynamicListQueryParameters)
+                    Data = await _imasterMinorHeadService.getmasterMinorHead(isActive ,dynamicListQueryParameters),
+                    DataCount = await _imasterMinorHeadService.CountMasterMinorHead(isActive ,dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -137,6 +137,24 @@ namespace master.Controllers
             try
             {
                 await _imasterMinorHeadService.deleteMinorHead(id);
+                return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("RestoreMasterMinorHead")]
+        public async Task<IActionResult> restoreMasterMinorHead(int id)
+        {
+            try
+            {
+                await _imasterMinorHeadService.restoreMasterMinorHead(id);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)
