@@ -130,24 +130,18 @@ namespace master.Controllers
             }
 
         }
-        /*[HttpGet("GetStudentByName")]
-        public async Task<IActionResult> GetStudentByName(string name)
-        {
-            try
-            {
-                List<Ddo> students = await _imasterDDOService.getStudentsByName(name);
-                return Ok(students);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }*/
+        
         [HttpPost("AddMasterDepartment")]
         public async Task<IActionResult> AddDepartment(masterDepartmentModel s)
         {
             try
             {
+                bool exists = await _imasterDepartmentService.masterDepartmentExistsByDemandCode(s.DemandCode);
+
+                if (exists)
+                {
+                    return BadRequest("Error: The provided code already exists in the database.");
+                }
                 int id = await _imasterDepartmentService.addDepartment(s);
                 return Ok(id);
             }
@@ -157,13 +151,13 @@ namespace master.Controllers
             }
         }
 
-        [HttpGet("CheckMasterDepartmentCode/{code}")]
-        public async Task<bool> CheckMasterDepartmentCode(string code)
+        [HttpGet("CheckMasterDepartmentDemandCode/{DemandCode}")]
+        public async Task<bool> CheckMasterDepartmentCode(string DemandCode)
         {
             try
             {
                 // Check if the Code exists
-                bool codeExists = await _imasterDepartmentService.MasterDepartmentExistsByCode(code);
+                bool codeExists = await _imasterDepartmentService.masterDepartmentExistsByDemandCode(DemandCode);
 
                 if (codeExists)
                 {

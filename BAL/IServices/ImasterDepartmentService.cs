@@ -15,8 +15,8 @@ namespace master.BAL.IServices
         Task<IEnumerable<masterDepartmentDto>> getmasterDepartment(bool isActive,DynamicListQueryParameters dynamicListQueryParameters);
         //int CountWithCondition(List<FilterParameter> dynamicFilters);
         Task<int> CountMasterDepartment(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
-        Task<bool> MasterDepartmentExistsByCode(string code);
-       // Task<bool> MasterDepartmentExistsById(int id);
+        Task<bool> masterDepartmentExistsByDemandCode(string DemandCode);
+        Task<bool> masterDepartmentExistsById(short id);
         // Task<IEnumerable<masterDepartmentDto>> getmasterDepartment(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
     }
 }

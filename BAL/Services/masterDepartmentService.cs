@@ -44,17 +44,7 @@ namespace master.BAL.Services
             return masterdept;
             
         }
-        /*public async Task<List<Department>> getDepartment()
-        {
-            try
-            {
-                return (await _masterDepartmentRepository.get()).ToList();
-            }
-            catch
-            {
-                throw;
-            }
-        }*/
+       
         public async Task<int> addDepartment(masterDepartmentModel s)
         {
             Department? newDepartment = new Department();
@@ -64,14 +54,16 @@ namespace master.BAL.Services
             return newDepartment.Id;
             
         }
-      /* public async Task<bool> MasterDepartmentExistsById(int id)
+
+
+        public async Task<bool> masterDepartmentExistsByDemandCode(string DemandCode)
+        {
+            return await _masterDepartmentRepository.AnyAsync(m => m.DemandCode == DemandCode);
+        }
+
+        public async Task<bool> masterDepartmentExistsById(short id)
         {
             return await _masterDepartmentRepository.AnyAsync(m => m.Id == id);
-        }*/
-
-        public async Task<bool> MasterDepartmentExistsByCode(string code)
-        {
-            return await _masterDepartmentRepository.AnyAsync(m => m.Code == code);
         }
         public async Task<bool> updateDepartment(short id, masterDepartmentModel s)
         {
