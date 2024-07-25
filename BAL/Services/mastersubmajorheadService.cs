@@ -62,6 +62,7 @@ namespace master.BAL.Services
         public async Task<int> AddMasterSubmajorHead(mastersubmajorheadModel model)
         {
             SubMajorHead newSubMajorHead = _mapper.Map<SubMajorHead>(model);
+            newSubMajorHead.Id = int.Parse(model.MajorHeadId.ToString() + model.Code);
             _mastersubmajorheadRepository.add(newSubMajorHead);
             _mastersubmajorheadRepository.saveChangesAsync();
 

@@ -44,7 +44,7 @@ namespace MasterManegmentSystem.BAL.Services
         public async Task<int> AddMasterMAJORHEAD(MasterManegmentModel model)
         {
             MajorHead newMajorHead = _mapper.Map<MajorHead>(model);
-            newMajorHead.Id = Convert.ToInt32(newMajorHead.Code);
+            newMajorHead.Id = int.Parse(newMajorHead.Code);
             _masterManegmentRepository.Add(newMajorHead);
             await _masterManegmentRepository.SaveChangesAsync();
 

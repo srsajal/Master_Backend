@@ -22,7 +22,7 @@ namespace master.BAL.Services
         }   
         public async Task<IEnumerable<masterMinorHeadDto>> getmasterMinorHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "DESC";
+            string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
             IEnumerable<masterMinorHeadDto> masterminor = await _masterMinorHeadRepository.GetSelectedColumnByConditionAsync(entity => entity.IsActive == isActive, entity => new masterMinorHeadDto
             {
@@ -46,6 +46,7 @@ namespace master.BAL.Services
         {
             IEnumerable<SubMajorHeadToMinorHeadDTO> StudentFormSajalResult = await _mastersubmajorheadRepository.GetSelectedColumnAsync(entity => new SubMajorHeadToMinorHeadDTO
             {
+                Id= entity.Id,
                 Code = entity.Code,
                 Name = entity.Name
             });
@@ -55,6 +56,7 @@ namespace master.BAL.Services
         {
             MinorHead? newMinorHead = new MinorHead();
             newMinorHead = _mapper.Map<MinorHead>(s);
+            newMinorHead.Id = int.Parse(s.SubMajorId.ToString() + s.Code);
             _masterMinorHeadRepository.add(newMinorHead);
             _masterMinorHeadRepository.saveChangesManage();
             return newMinorHead.Id;

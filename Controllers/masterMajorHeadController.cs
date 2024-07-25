@@ -84,15 +84,6 @@ namespace master.Controllers
         {
             try
             {
-                // Check if the Code already exists
-                bool exists = await _imasterManagementService.MasterMAJORHEADExistsByCode(s.Code);
-
-                if (exists)
-                {
-                    return BadRequest("Error: The provided code already exists in the database.");
-                }
-
-                // Add the new MasterMAJORHEAD
                 int id = await _imasterManagementService.AddMasterMAJORHEAD(s);
                 return Ok(id);
             }
