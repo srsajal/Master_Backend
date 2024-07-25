@@ -156,6 +156,28 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("CheckMasterDepartmentCode/{code}")]
+        public async Task<bool> CheckMasterDepartmentCode(string code)
+        {
+            try
+            {
+                // Check if the Code exists
+                bool codeExists = await _imasterDepartmentService.MasterDepartmentExistsByCode(code);
+
+                if (codeExists)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         [HttpPut("UpdateMasterDepartment")]
         public async Task<IActionResult> UpdateDepartment(short id, masterDepartmentModel s)
         {
@@ -192,7 +214,7 @@ namespace master.Controllers
             }
         }
         [HttpDelete("RestoreMasterDepartment")]
-        public async Task<IActionResult> RestoreMasterDdo(int id)
+        public async Task<IActionResult> RestoreMasterDdo(short id)
         {
             try
             {

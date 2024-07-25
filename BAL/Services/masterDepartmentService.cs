@@ -64,6 +64,15 @@ namespace master.BAL.Services
             return newDepartment.Id;
             
         }
+      /* public async Task<bool> MasterDepartmentExistsById(int id)
+        {
+            return await _masterDepartmentRepository.AnyAsync(m => m.Id == id);
+        }*/
+
+        public async Task<bool> MasterDepartmentExistsByCode(string code)
+        {
+            return await _masterDepartmentRepository.AnyAsync(m => m.Code == code);
+        }
         public async Task<bool> updateDepartment(short id, masterDepartmentModel s)
         {
             var updatedDepartment = await _masterDepartmentRepository.GetByIdAsync(id);
@@ -98,7 +107,7 @@ namespace master.BAL.Services
                 await _masterDepartmentRepository.saveChangesAsync();
             return true;
         }
-        public async Task<bool> restoreMasterDepartment(int id)
+        public async Task<bool> restoreMasterDepartment(short id)
         {
             var toRestoreStudent = await _masterDepartmentRepository.GetByIdAsync(id);
 
