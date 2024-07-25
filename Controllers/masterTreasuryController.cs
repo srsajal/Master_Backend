@@ -113,7 +113,7 @@ namespace master.Controllers
                      },
                      new ListHeader
                      {
-                         Name="Code",
+                         Name="Treasury Code",
                          DataType="text",
                          FieldName ="code",
                          FilterField ="Code",
@@ -122,7 +122,7 @@ namespace master.Controllers
                      },
                      new ListHeader
                      {
-                         Name="Name",
+                         Name="Treasury Name",
                          DataType="text",
                          FieldName ="name",
                          FilterField ="Name",
