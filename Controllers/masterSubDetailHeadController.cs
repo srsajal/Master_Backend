@@ -160,7 +160,7 @@ namespace master.Controllers
             }
         }
         [HttpDelete("RestoreMasterSubDetailHead")]
-        public async Task<IActionResult> RestoreMasterSubDetailHead(int id)
+        public async Task<IActionResult> RestoreMasterSubDetailHead(short id)
         {
             try
             {
