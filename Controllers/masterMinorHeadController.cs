@@ -149,6 +149,24 @@ namespace master.Controllers
             }
         }
 
+        [HttpPost("CountMasterMinorHead")]
+        public async Task<IActionResult> CountMasterMinorHead([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
+        {
+            try
+            {
+                var DataCount = await _imasterMinorHeadService.CountMasterMinorHead(isActive, dynamicListQueryParameters);
+                return Ok(DataCount);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpDelete("RestoreMasterMinorHead")]
         public async Task<IActionResult> restoreMasterMinorHead(int id)
         {
