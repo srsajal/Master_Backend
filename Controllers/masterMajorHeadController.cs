@@ -4,21 +4,23 @@ using masterDDO.Helpers;
 using MasterManegmentSystem.BAL.IServices;
 using MasterManegmentSystem.Dto;
 using MasterManegmentSystem.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MasterManegmentSystem.Controllers
+namespace master.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MasterManegmentControllers : Controller
+    public class masterMajorHeadController : ControllerBase
     {
-        IMasterManegmentService _imasterDDOService;
-        public MasterManegmentControllers(IMasterManegmentService es)
+        IMasterManegmentService _imasterManagementService;
+        public masterMajorHeadController(IMasterManegmentService es)
         {
-            _imasterDDOService = es;
+            _imasterManagementService = es;
+
         }
         [HttpPost("GetMasterMAJORHEAD")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>>>> GetStudent([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<MasterManegmentDTO>>> response = new();
             try
@@ -27,8 +29,8 @@ namespace MasterManegmentSystem.Controllers
                 {
                     Headers = new List<ListHeader>
                 {
-                    
-                      
+
+
                     new ListHeader
                     {
                         Name="Code",
@@ -47,10 +49,10 @@ namespace MasterManegmentSystem.Controllers
                         IsFilterable=true,
                         IsSortable=true,
                     },
-                    
+
                 },
-                    Data = await _imasterDDOService.GetMastermajorhead(dynamicListQueryParameters),
-                    DataCount = await _imasterDDOService.CountMasterDDO(dynamicListQueryParameters)
+                    Data = await _imasterManagementService.GetMastermajorhead(isActive, dynamicListQueryParameters),
+                    DataCount = await _imasterManagementService.CountMasterMajorHead(isActive, dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -63,11 +65,11 @@ namespace MasterManegmentSystem.Controllers
         }
 
         [HttpGet("GetMasterMAJORHEADById")]
-        public async Task<IActionResult> GetMasterMAJORHEADById(short id)
+        public async Task<IActionResult> GetMasterMAJORHEADById(int id)
         {
             try
             {
-                var student = await _imasterDDOService.GetMastermajorheadById(id);
+                var student = await _imasterManagementService.GetMastermajorheadById(id);
                 return Ok(student);
             }
             catch (Exception ex)
@@ -82,7 +84,7 @@ namespace MasterManegmentSystem.Controllers
         {
             try
             {
-                int id = await _imasterDDOService.AddMasterMAJORHEAD(s);
+                int id = await _imasterManagementService.AddMasterMAJORHEAD(s);
                 return Ok(id);
             }
             catch (Exception ex)
@@ -90,12 +92,34 @@ namespace MasterManegmentSystem.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        [HttpPut("UpdateMasterMAJORHEAD")]
-        public async Task<IActionResult> UpdateMasterMAJORHEAD(short id, MasterManegmentModel s)
+
+        [HttpGet("CheckMasterMAJORHEADCode/{code}")]
+        public async Task<IActionResult> CheckMasterMAJORHEADCode(string code)
         {
             try
             {
-                await _imasterDDOService.UpdateMastermajorhead(id, s);
+                // Check if the Code exists
+                bool codeExists = await _imasterManagementService.MasterMAJORHEADExistsByCode(code);
+
+                if (codeExists)
+                {
+                    return Ok(true);
+                }
+
+                return Ok(false);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpPut("UpdateMasterMAJORHEAD")]
+        public async Task<IActionResult> UpdateMasterMAJORHEAD(int id, MasterManegmentModel s)
+        {
+            try
+            {
+                await _imasterManagementService.UpdateMastermajorhead(id, s);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)
@@ -109,12 +133,46 @@ namespace MasterManegmentSystem.Controllers
         }
 
         [HttpDelete("DeleteMasterMAJORHEAD")]
-        public async Task<IActionResult> DeleteMasterMAJORHEAD(short id)
+        public async Task<IActionResult> DeleteMasterMAJORHEAD(int id)
         {
             try
             {
-                await _imasterDDOService.DeleteMastermajorhead(id);
+                await _imasterManagementService.DeleteMastermajorhead(id);
                 return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpDelete("RestoreMasterMajorHead")]
+        public async Task<IActionResult> RestoreMasterDdo(int id)
+        {
+            try
+            {
+                await _imasterManagementService.restoreMasterMajorHead(id);
+                return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpPost("CountMasterMajorHead")]
+        public async Task<IActionResult> CountMasterDdo([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
+        {
+            try
+            {
+                var DataCount = await _imasterManagementService.CountMasterMajorHead(isActive, dynamicListQueryParameters);
+                return Ok(DataCount);
             }
             catch (ArgumentException ex)
             {

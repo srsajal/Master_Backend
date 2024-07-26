@@ -1,6 +1,6 @@
 ﻿namespace master.Dto
 {
-    public class masterDetailHeadDto
+    public class DetailToSubDetailCodeDTO
     {
         public short Id { get; set; }
         public string Code { get; set; }

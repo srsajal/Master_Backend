@@ -5,6 +5,8 @@ using master.DAL.IRepository;
 using master.DAL.Repository;
 using master.Dto;
 using master.Models;
+using MasterManegmentSystem.DAL.IRepository;
+using Microsoft.AspNetCore.Mvc;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using System.Linq.Expressions;
 
@@ -13,20 +15,44 @@ namespace master.BAL.Services
     public class masterDDOService : ImasterDDOService
     {
         ImasterDDORepository _masterDDORepository;
+        ImasterDetailHeadRepository _masterDetailHeadRepository;
+        ImasterSubDetailHeadRepository _masterSubDetailHeadRepository;
+        ImasterDepartmentRepository _masterDepartmentRepository;
+        IMasterManegmentRepository _masterManegmentRepository;
+        ImasterSCHEME_HEADRepository _masterSchemeHeadRepository;
+        ImasterMinorHeadRepository _masterMinorHeadRepository;
+        ImastersubmajorheadRepository _mastersubmajorheadRepository;
         ImasterTreasuryRepository _masterTreasuryRepository;
         IMapper _mapper;
-        public masterDDOService(IMapper mapper, ImasterDDORepository masterDDORepository, ImasterTreasuryRepository masterTreasuryRepository)
+        public masterDDOService(IMapper mapper, ImasterDDORepository masterDDORepository,
+            ImasterDetailHeadRepository masterDetailHeadRepository,
+            ImasterSubDetailHeadRepository masterSubDetailHeadRepository,
+            ImasterDepartmentRepository masterDepartmentRepository,
+            IMasterManegmentRepository masterManegmentRepository,
+            ImasterSCHEME_HEADRepository masterSchemeHeadRepository,
+            ImasterMinorHeadRepository masterMinorHeadRepository,
+            ImastersubmajorheadRepository mastersubmajorheadRepository,
+            ImasterTreasuryRepository masterTreasuryRepository
+            )
         {
             _mapper = mapper;
             _masterDDORepository = masterDDORepository;
+            _masterDetailHeadRepository = masterDetailHeadRepository;
+            _masterSubDetailHeadRepository = masterSubDetailHeadRepository;
+            _masterDepartmentRepository = masterDepartmentRepository;
+            _masterManegmentRepository = masterManegmentRepository;
+            _masterSchemeHeadRepository = masterSchemeHeadRepository;
+            _masterMinorHeadRepository = masterMinorHeadRepository;
+            _mastersubmajorheadRepository = mastersubmajorheadRepository;
             _masterTreasuryRepository = masterTreasuryRepository;
+
         }
 
-        public async Task<IEnumerable<masterDDODto>> getmasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<masterDDODto>> getmasterDDO(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-            IEnumerable<masterDDODto> StudentFormSajalResult = await _masterDDORepository.GetSelectedColumnByConditionAsync(entity => new masterDDODto
+            IEnumerable<masterDDODto> StudentFormSajalResult = await _masterDDORepository.GetSelectedColumnByConditionAsync(entity=>entity.IsActive==isActive, entity => new masterDDODto
             {
                 Id = entity.Id,
                 TreasuryCode = entity.TreasuryCode,
@@ -35,7 +61,7 @@ namespace master.BAL.Services
                 Designation = entity.Designation,
                 //DesignationMstld = entity.DesignationMstId,
                 Address = entity.Address,
-                Phone = entity.Phone
+                Phone = entity.Phone,
             },
             dynamicListQueryParameters.PageIndex,
             dynamicListQueryParameters.PageSize,
@@ -75,7 +101,14 @@ namespace master.BAL.Services
         public async Task<int> addStudent(masterDDOModel s)
         {
             Ddo? newDdo = new Ddo();
-            newDdo = _mapper.Map<Ddo>(s);
+            //newDdo = _mapper.Map<Ddo>(s);
+            newDdo.TreasuryCode = s.TreasuryCode;
+            newDdo.TreasuryMstId = s.TreasuryMstld;
+            newDdo.Code = s.Code;
+            newDdo.Designation = s.Designation;
+            newDdo.DesignationMstId = s.DesignationMstld;
+            newDdo.Address = s.Address;
+            newDdo.Phone = s.Phone;
             _masterDDORepository.add(newDdo);
             _masterDDORepository.saveChangesManage();
 
@@ -112,11 +145,35 @@ namespace master.BAL.Services
         public async Task<bool> deleteStudent(int id)
         {
             var toDeleteStudent = await _masterDDORepository.GetByIdAsync(id);
+
+            toDeleteStudent.IsActive = false;
+            
+            _masterDDORepository.update(toDeleteStudent);
+            _masterDDORepository.saveChangesManage();
+
+            /*var toDeleteStudent = await _masterDDORepository.GetByIdAsync(id);
             if (toDeleteStudent != null)
             {
                 _masterDDORepository.delete(toDeleteStudent);
                 await _masterDDORepository.saveChangesAsync();
-            }
+            }*/
+            return true;
+        }
+        public async Task<bool> restoreMasterDdo(int id)
+        {
+            var toRestoreStudent = await _masterDDORepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _masterDDORepository.update(toRestoreStudent);
+            _masterDDORepository.saveChangesManage();
+
+            /*var toDeleteStudent = await _masterDDORepository.GetByIdAsync(id);
+            if (toDeleteStudent != null)
+            {
+                _masterDDORepository.delete(toDeleteStudent);
+                await _masterDDORepository.saveChangesAsync();
+            }*/
             return true;
         }
         public async Task<masterDDODto> getStudentById(int id)
@@ -145,10 +202,44 @@ namespace master.BAL.Services
 
         }*/
 
-        public async Task<int> CountMasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountMasterDDO(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<Ddo, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterDDORepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            //Expression<Func<Ddo, bool>> condition = d => true; // Default condition if no specific condition is required
+            return _masterDDORepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);
+        }
+        public async Task<AllMasterDTO> CountAllMaster()
+        {
+            AllMasterDTO allMasterCount = new AllMasterDTO
+            {
+                TotalActiveDdo = _masterDDORepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveDdo = _masterDDORepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveDetailHead = _masterDetailHeadRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveDetailHead = _masterDetailHeadRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveSubDetailHead = _masterSubDetailHeadRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveSubDetailHead = _masterSubDetailHeadRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveDepartment = _masterDepartmentRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveDepartment = _masterDepartmentRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveMajorHead = _masterManegmentRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveMajorHead = _masterManegmentRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveSchemeHead = _masterSchemeHeadRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveSchemeHead = _masterSchemeHeadRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveTreasury = _masterTreasuryRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveTreasury = _masterTreasuryRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveMinorHead = _masterMinorHeadRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveMinorHead = _masterMinorHeadRepository.CountWithCondition(entity => entity.IsActive == false),
+
+                TotalActiveSubMajorHead = _mastersubmajorheadRepository.CountWithCondition(entity => entity.IsActive == true),
+                TotalInactiveSubMajorHead = _mastersubmajorheadRepository.CountWithCondition(entity => entity.IsActive == false),
+            };
+
+            return allMasterCount;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace master.Controllers
             _imasterMinorHeadService = imasterMinorHeadService;
         }
         [HttpPost("GetmasterMinorHead")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterMinorHeadDto>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterMinorHeadDto>>>>> GetStudent([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<masterMinorHeadDto>>> response = new();
             try
@@ -57,8 +57,8 @@ namespace master.Controllers
                         IsSortable=true,
                     },
                 },
-                    Data = await _imasterMinorHeadService.getmasterMinorHead(dynamicListQueryParameters),
-                    DataCount = await _imasterMinorHeadService.CountMasterMinorHead(dynamicListQueryParameters)
+                    Data = await _imasterMinorHeadService.getmasterMinorHead(isActive ,dynamicListQueryParameters),
+                    DataCount = await _imasterMinorHeadService.CountMasterMinorHead(isActive ,dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -84,19 +84,22 @@ namespace master.Controllers
             }
 
         }
-        /*[HttpGet("GetStudentByName")]
-        public async Task<IActionResult> GetStudentByName(string name)
+
+        [HttpGet("GetSubMajorHeadCode")]
+        public async Task<IActionResult> GetSubMajorHeadCodes()
         {
             try
             {
-                List<Ddo> students = await _imasterDDOService.getStudentsByName(name);
-                return Ok(students);
+                var codes = await _imasterMinorHeadService.getSubMajorHeadCode();
+                return Ok(codes);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-        }*/
+
+        }
+
         [HttpPost("AddmasterMinorHead")]
         public async Task<IActionResult> AddMinorHead(masterMinorHeadModel s)
         {
@@ -134,6 +137,42 @@ namespace master.Controllers
             try
             {
                 await _imasterMinorHeadService.deleteMinorHead(id);
+                return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("CountMasterMinorHead")]
+        public async Task<IActionResult> CountMasterMinorHead([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
+        {
+            try
+            {
+                var DataCount = await _imasterMinorHeadService.CountMasterMinorHead(isActive, dynamicListQueryParameters);
+                return Ok(DataCount);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("RestoreMasterMinorHead")]
+        public async Task<IActionResult> restoreMasterMinorHead(int id)
+        {
+            try
+            {
+                await _imasterMinorHeadService.restoreMasterMinorHead(id);
                 return StatusCode(200);
             }
             catch (ArgumentException ex)

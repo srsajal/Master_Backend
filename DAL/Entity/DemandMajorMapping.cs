@@ -21,6 +21,9 @@ public partial class DemandMajorMapping
     [StringLength(4)]
     public string MajorHeadCode { get; set; } = null!;
 
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
+
     public virtual Department DemandCodeNavigation { get; set; } = null!;
 
     public virtual MajorHead MajorHeadCodeNavigation { get; set; } = null!;

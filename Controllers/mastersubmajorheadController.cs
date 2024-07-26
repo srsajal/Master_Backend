@@ -1,24 +1,25 @@
 ﻿using master.BAL.IServices;
+using master.BAL.Services;
 using master.Dto;
 using master.Models;
 using masterDDO.Enums;
 using masterDDO.Helpers;
-using MasterManegmentSystem.BAL.IServices;
-using MasterManegmentSystem.Dto;
-using MasterManegmentSystem.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace master.Controllers
 {
-    public class mastersubmajorheadController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class masterSubMajorHeadController : ControllerBase
     {
         ImastersubmajorheadService _mastersubmajorheadService;
-        public mastersubmajorheadController(ImastersubmajorheadService es)
+        public masterSubMajorHeadController(ImastersubmajorheadService es)
         {
             _mastersubmajorheadService = es;
         }
         [HttpPost("GetMastersubmajorhead")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<mastersubmajorheadDTO>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<mastersubmajorheadDTO>>>>> GetStudent([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<mastersubmajorheadDTO>>> response = new();
             try
@@ -49,7 +50,7 @@ namespace master.Controllers
                     },
                     new ListHeader
                     {
-                        Name="MajorHeadId",
+                        Name="Major Head Id",
                         DataType="text",
                         FieldName ="majorHeadId",
                         FilterField ="MajorHeadId",
@@ -58,8 +59,8 @@ namespace master.Controllers
                     },
 
                 },
-                    Data = await _mastersubmajorheadService.GetMastersubmajorhead(dynamicListQueryParameters),
-                    DataCount = await _mastersubmajorheadService.CountMastersubmajorhead(dynamicListQueryParameters)
+                    Data = await _mastersubmajorheadService.GetMastersubmajorhead(isActive, dynamicListQueryParameters),
+                    DataCount = await _mastersubmajorheadService.CountMastersubmajorhead(isActive, dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -78,6 +79,20 @@ namespace master.Controllers
             {
                 var student = await _mastersubmajorheadService.GetMasterMastersubMajorHeadById(id);
                 return Ok(student);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+        }
+        [HttpGet("GetMajorHeadcode")]
+        public async Task<IActionResult> GetMajorHeadcode()
+        {
+            try
+            {
+                var codes = await _mastersubmajorheadService.GetMajorHeadcode();
+                return Ok(codes);
             }
             catch (Exception ex)
             {
@@ -134,6 +149,41 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-    
+
+        [HttpPost("CountMasterSubMajorHead")]
+        public async Task<IActionResult> CountMasterMinorHead([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
+        {
+            try
+            {
+                var DataCount = await _mastersubmajorheadService.CountMastersubmajorhead(isActive, dynamicListQueryParameters);
+                return Ok(DataCount);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("RestoreMasterSubMajorHead")]
+        public async Task<IActionResult> restoreMastersubMajorHead(int id)
+        {
+            try
+            {
+                await _mastersubmajorheadService.restoreMastersubMajorHead(id);
+                return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

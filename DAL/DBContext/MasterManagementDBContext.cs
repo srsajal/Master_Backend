@@ -54,6 +54,7 @@ public partial class MasterManagementDBContext : DbContext
             entity.HasKey(e => e.Id).HasName("ddo_pkey");
 
             entity.Property(e => e.Code).IsFixedLength();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
             entity.Property(e => e.Phone).IsFixedLength();
             entity.Property(e => e.TreasuryCode).IsFixedLength();
         });
@@ -63,6 +64,7 @@ public partial class MasterManagementDBContext : DbContext
             entity.HasKey(e => e.Id).HasName("demand_major_mapping_pkey");
 
             entity.Property(e => e.DemandCode).IsFixedLength();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
             entity.Property(e => e.MajorHeadCode).IsFixedLength();
 
             entity.HasOne(d => d.DemandCodeNavigation).WithMany(p => p.DemandMajorMappings)
@@ -75,7 +77,7 @@ public partial class MasterManagementDBContext : DbContext
                 .HasPrincipalKey(p => p.Code)
                 .HasForeignKey(d => d.MajorHeadCode)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_major_head_code");
+                .HasConstraintName("fk_majorhead_code");
         });
 
         modelBuilder.Entity<Department>(entity =>
@@ -84,6 +86,7 @@ public partial class MasterManagementDBContext : DbContext
 
             entity.Property(e => e.Code).IsFixedLength();
             entity.Property(e => e.DemandCode).IsFixedLength();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
             entity.Property(e => e.MobileNumber).IsFixedLength();
             entity.Property(e => e.PhoneNumber).IsFixedLength();
             entity.Property(e => e.PinCode).IsFixedLength();
@@ -92,6 +95,8 @@ public partial class MasterManagementDBContext : DbContext
         modelBuilder.Entity<Designation>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("designation_pkey");
+
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
         });
 
         modelBuilder.Entity<DetailHead>(entity =>
@@ -99,6 +104,7 @@ public partial class MasterManagementDBContext : DbContext
             entity.HasKey(e => e.Id).HasName("detail_head_pkey");
 
             entity.Property(e => e.Code).IsFixedLength();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
         });
 
         modelBuilder.Entity<Level>(entity =>
@@ -106,6 +112,7 @@ public partial class MasterManagementDBContext : DbContext
             entity.HasKey(e => e.Id).HasName("level_pkey");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
         });
 
         modelBuilder.Entity<MajorHead>(entity =>
@@ -114,6 +121,7 @@ public partial class MasterManagementDBContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Code).IsFixedLength();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
         });
 
         modelBuilder.Entity<MinorHead>(entity =>
@@ -122,6 +130,7 @@ public partial class MasterManagementDBContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Code).IsFixedLength();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
 
             entity.HasOne(d => d.SubMajor).WithMany(p => p.MinorHeads).HasConstraintName("FK_submajor");
         });
@@ -132,6 +141,7 @@ public partial class MasterManagementDBContext : DbContext
 
             entity.Property(e => e.Code).IsFixedLength();
             entity.Property(e => e.DemandCode).IsFixedLength();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
 
             entity.HasOne(d => d.DemandCodeNavigation).WithMany(p => p.SchemeHeads)
                 .HasPrincipalKey(p => p.DemandCode)
@@ -146,6 +156,7 @@ public partial class MasterManagementDBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("scheme_type_mst_pk");
 
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
             entity.Property(e => e.Type).IsFixedLength();
         });
 
@@ -154,6 +165,7 @@ public partial class MasterManagementDBContext : DbContext
             entity.HasKey(e => e.Id).HasName("sub_detail_head_pkey");
 
             entity.Property(e => e.Code).IsFixedLength();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
 
             entity.HasOne(d => d.DetailHead).WithMany(p => p.SubDetailHeads).HasConstraintName("FK_DetailHead");
         });
@@ -164,13 +176,16 @@ public partial class MasterManagementDBContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Code).IsFixedLength();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
 
-            entity.HasOne(d => d.MajorHead).WithMany(p => p.SubMajorHeads).HasConstraintName("FK_majorhead");
+            entity.HasOne(d => d.MajorHead).WithMany(p => p.SubMajorHeads).HasConstraintName("fk_majorhead_id");
         });
 
         modelBuilder.Entity<SubSchemeType>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("sub_scheme_type_pk");
+
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
         });
 
         modelBuilder.Entity<Treasury>(entity =>
@@ -178,6 +193,7 @@ public partial class MasterManagementDBContext : DbContext
             entity.HasKey(e => e.Id).HasName("treasury_pkey");
 
             entity.Property(e => e.Code).IsFixedLength();
+            entity.Property(e => e.IsActive).HasDefaultValueSql("true");
         });
 
         OnModelCreatingPartial(modelBuilder);

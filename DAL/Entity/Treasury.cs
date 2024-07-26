@@ -27,4 +27,7 @@ public partial class Treasury
     [Column("name")]
     [StringLength(100)]
     public string Name { get; set; } = null!;
+
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
 }

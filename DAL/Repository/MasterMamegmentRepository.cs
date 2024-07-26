@@ -16,7 +16,5 @@ namespace MasterManegmentSystem.DAL.Repository
         {
             _mContext = context;
         }
-
-        
     }
 }

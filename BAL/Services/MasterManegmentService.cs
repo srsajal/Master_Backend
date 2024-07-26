@@ -5,6 +5,7 @@ using MasterManegmentSystem.BAL.IServices;
 using MasterManegmentSystem.DAL.IRepository;
 using MasterManegmentSystem.Dto;
 using MasterManegmentSystem.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace MasterManegmentSystem.BAL.Services
@@ -20,11 +21,11 @@ namespace MasterManegmentSystem.BAL.Services
             _masterManegmentRepository = masterManegmentRepository;
         }
 
-        public async Task<IEnumerable<MasterManegmentDTO>> GetMastermajorhead(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<MasterManegmentDTO>> GetMastermajorhead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
                 string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
                 string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-                IEnumerable<MasterManegmentDTO> result = await _masterManegmentRepository.GetSelectedColumnByConditionAsync(
+                IEnumerable<MasterManegmentDTO> result = await _masterManegmentRepository.GetSelectedColumnByConditionAsync(entity => entity.IsActive == isActive,
                     entity => new MasterManegmentDTO
                     {
                         Id = entity.Id,
@@ -40,22 +41,33 @@ namespace MasterManegmentSystem.BAL.Services
                 return result;
         }
 
-       public async Task<int> AddMasterMAJORHEAD(MasterManegmentModel model)
+        public async Task<int> AddMasterMAJORHEAD(MasterManegmentModel model)
         {
-                MajorHead newMajorHead = _mapper.Map<MajorHead>(model);
-                _masterManegmentRepository.add(newMajorHead);
-               _masterManegmentRepository.saveChangesAsync();
+            MajorHead newMajorHead = _mapper.Map<MajorHead>(model);
+            newMajorHead.Id = int.Parse(newMajorHead.Code);
+            _masterManegmentRepository.add(newMajorHead);
+            await _masterManegmentRepository.saveChangesAsync();
 
-                return newMajorHead.Id;
+            return newMajorHead.Id;
         }
 
-        public async Task<bool> UpdateMastermajorhead(short id, MasterManegmentModel model)
+        public async Task<bool> MasterMAJORHEADExistsByCode(string code)
+        {
+            int numberOfRow = await _masterManegmentRepository.CountWithConditionAsync(x => x.Code == code);
+            if (numberOfRow>0)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> UpdateMastermajorhead(int id, MasterManegmentModel model)
         {
                 MajorHead updatedStudent = await _masterManegmentRepository.GetByIdAsync(id);
 
                 if (updatedStudent == null) return false;
+                updatedStudent.Code = model.Code;
+                updatedStudent.Name = model.Name;   
 
-                _mapper.Map(model, updatedStudent);
 
                 _masterManegmentRepository.update(updatedStudent);
                 await _masterManegmentRepository.saveChangesAsync();
@@ -63,30 +75,40 @@ namespace MasterManegmentSystem.BAL.Services
                 return true;
         }
 
-        public async Task<bool> DeleteMastermajorhead(short id)
+        public async Task<bool> DeleteMastermajorhead(int  id)
         {
-                MajorHead student = await _masterManegmentRepository.GetByIdAsync(id);
-                if (student == null) return false;
+                MajorHead toDeleteStudent = await _masterManegmentRepository.GetByIdAsync(id);
+                toDeleteStudent.IsActive = false;
 
-                _masterManegmentRepository.delete(student);
+                _masterManegmentRepository.update(toDeleteStudent);
                 await _masterManegmentRepository.saveChangesAsync();
 
                 return true;
         }
-
-       
-
-        public async Task<int> CountMasterDDO(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<bool> restoreMasterMajorHead(int id)
         {
-            Expression<Func<MajorHead, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterManegmentRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            var toRestoreStudent = await _masterManegmentRepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _masterManegmentRepository.update(toRestoreStudent);
+            _masterManegmentRepository.saveChangesManage();
+            return true;
         }
 
-        public Task<MajorHead> GetMastermajorheadById(short id)
+
+
+        public async Task<int> CountMasterMajorHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
+        {
+            return _masterManegmentRepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);
+        }
+
+        public Task<MajorHead> GetMastermajorheadById(int id)
         {
             return  _masterManegmentRepository.GetByIdAsync(id);
         }
+       
 
-        
+
     }
 }

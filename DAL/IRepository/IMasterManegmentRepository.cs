@@ -7,7 +7,6 @@ namespace MasterManegmentSystem.DAL.IRepository
 {
     public interface IMasterManegmentRepository : IRepository<MajorHead>
     {
-        
     }
 }
 

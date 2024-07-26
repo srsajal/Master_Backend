@@ -1,4 +1,5 @@
-﻿using master.DAL.Entity;
+﻿
+using master.DAL.Entity;
 using master.DAL.IRepository;
 using master.Dto;
 using masterDDO.Helpers;
@@ -94,9 +95,47 @@ namespace master.DAL.Repository
             return result;
         }
 
+        public async Task<ICollection<TResult>> GetSelectedColumnByConditionAsync<TResult>(
+             Expression<Func<T, bool>> filterExpression,
+             Expression<Func<T, TResult>> selectExpression,
+             int pageIndex = 0,
+             int pageSize = 10,
+             List<FilterParameter> dynamicFilters = null,
+             string orderByField = null,
+             string orderByOrder = null
+         )
+        {
+            IQueryable<T> query = this._masterDdoContext.Set<T>().Where(filterExpression);
+
+            if (dynamicFilters != null && dynamicFilters.Any())
+            {
+                foreach (var filter in dynamicFilters)
+                {
+                    var dynimicFilterExpression = ExpressionHelper.GetFilterExpression<T>(filter.Field, filter.Value, filter.Operator);
+                    query = query.Where(dynimicFilterExpression);
+                }
+            }
+            // Dynamic order by expression
+            if (!string.IsNullOrWhiteSpace(orderByField))
+            {
+                var parameter = Expression.Parameter(typeof(T), "x");
+                var property = Expression.Property(parameter, orderByField);
+                var lambda = Expression.Lambda<Func<T, object>>(Expression.Convert(property, typeof(object)), parameter);
+
+                if (orderByOrder == "ASC")
+                {
+                    query = query.OrderBy(lambda);
+                }
+                else
+                {
+                    query = query.OrderByDescending(lambda);
+                }
+            }
+            var result = await query.Select(selectExpression).Skip(pageIndex).Take(pageSize).ToListAsync();
+            return result;
+        }
         public async Task<ICollection<TResult>> GetSelectedColumnAsync<TResult>( Expression<Func<T, TResult>> selectExpression)
         {
-           
             IQueryable<T> query = this._masterDdoContext.Set<T>();
             var result = await query.Select(selectExpression).ToListAsync();
             return result;
@@ -121,8 +160,21 @@ namespace master.DAL.Repository
                     query = query.Where(dynimicFilterExpression);
                 }
             }
-            //var result = query.Select(selectExpression).ToListAsync();
             return query.Count(condition);
+        }
+        public async Task<int> CountWithConditionAsync(Expression<Func<T, bool>> condition, List<FilterParameter> dynamicFilters = null)
+        {
+            IQueryable<T> query = this._masterDdoContext.Set<T>();
+
+            if (dynamicFilters != null && dynamicFilters.Any())
+            {
+                foreach (var filter in dynamicFilters)
+                {
+                    var dynimicFilterExpression = ExpressionHelper.GetFilterExpression<T>(filter.Field, filter.Value, filter.Operator);
+                    query = query.Where(dynimicFilterExpression);
+                }
+            }
+            return await query.CountAsync(condition);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using master.BAL.IServices;
+using master.BAL.Services;
 using master.Dto;
 using master.Models;
 using masterDDO.Enums;
@@ -20,22 +21,70 @@ namespace master.Controllers
         }
 
 
-        /* [HttpGet("GetMasterDdo")]
-         public async Task<IActionResult> GetStudent()
+
+        [HttpPost("GetMasterTreasury")]
+        /* public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterTresuryDTOs>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
          {
+             ServiceResponse<DynamicListResult<IEnumerable<masterTresuryDTOs>>> response = new();
              try
              {
-                 var students = await _imasterDDOService.getstudents();
-                 return Ok(students);
+                 DynamicListResult<IEnumerable<masterTresuryDTOs>> result = new DynamicListResult<IEnumerable<masterTresuryDTOs>>
+                 {
+                     Headers = new List<ListHeader>
+                 {
+                     new ListHeader
+                     {
+                         Name="District Name",
+                         DataType="text",
+                         FieldName ="districtName",
+                         FilterField ="DistrictName",
+                         IsFilterable=true,
+                         IsSortable=true,
+                     },
+                     new ListHeader
+                     {
+                         Name="District Code",
+                         DataType="number",
+                         FieldName ="districtCode",
+                         FilterField ="DistrictCode",
+                         IsFilterable=true,
+                         IsSortable=true,
+                     },
+                     new ListHeader
+                     {
+                         Name="Code",
+                         DataType="text",
+                         FieldName ="code",
+                         FilterField ="Code",
+                         IsFilterable=true,
+                         IsSortable=true,
+                     },
+                     new ListHeader
+                     {
+                         Name="Name",
+                         DataType="text",
+                         FieldName ="name",
+                         FilterField ="Name",
+                         IsFilterable=true,
+                         IsSortable=true,
+                     }
+
+
+                 },
+                     Data = await _imasterTreasuryService.getmasterTreasury(dynamicListQueryParameters),
+                     DataCount = await _imasterTreasuryService.CountMasterTreasury(dynamicListQueryParameters)
+                 };
+                 response.result = result;
              }
              catch (Exception ex)
              {
-                 return StatusCode(500, "Internal server error");
+                 response.Message = ex.Message;
+                 response.apiResponseStatus = APIResponseStatus.Error;
              }
+             return Ok(response);
          }*/
 
-        [HttpPost("GetMasterTreasury")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterTresuryDTOs>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterTresuryDTOs>>>>> GetStudent([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<masterTresuryDTOs>>> response = new();
             try
@@ -45,46 +94,44 @@ namespace master.Controllers
                     Headers = new List<ListHeader>
                 {
                     new ListHeader
-                    {
-                        Name="District Name",
-                        DataType="text",
-                        FieldName ="districtName",
-                        FilterField ="DistrictName",
-                        IsFilterable=true,
-                        IsSortable=true,
-                    },
-                    new ListHeader
-                    {
-                        Name="District Code",
-                        DataType="number",
-                        FieldName ="districtCode",
-                        FilterField ="DistrictCode",
-                        IsFilterable=true,
-                        IsSortable=true,
-                    },
-                    new ListHeader
-                    {
-                        Name="Code",
-                        DataType="text",
-                        FieldName ="code",
-                        FilterField ="Code",
-                        IsFilterable=true,
-                        IsSortable=true,
-                    },
-                    new ListHeader
-                    {
-                        Name="Name",
-                        DataType="text",
-                        FieldName ="name",
-                        FilterField ="Name",
-                        IsFilterable=true,
-                        IsSortable=true,
-                    }
-                 
-                 
+                     {
+                         Name="District Name",
+                         DataType="text",
+                         FieldName ="districtName",
+                         FilterField ="DistrictName",
+                         IsFilterable=true,
+                         IsSortable=true,
+                     },
+                     new ListHeader
+                     {
+                         Name="District Code",
+                         DataType="number",
+                         FieldName ="districtCode",
+                         FilterField ="DistrictCode",
+                         IsFilterable=true,
+                         IsSortable=true,
+                     },
+                     new ListHeader
+                     {
+                         Name="Treasury Code",
+                         DataType="text",
+                         FieldName ="code",
+                         FilterField ="Code",
+                         IsFilterable=true,
+                         IsSortable=true,
+                     },
+                     new ListHeader
+                     {
+                         Name="Treasury Name",
+                         DataType="text",
+                         FieldName ="name",
+                         FilterField ="Name",
+                         IsFilterable=true,
+                         IsSortable=true,
+                     }
                 },
-                    Data = await _imasterTreasuryService.getmasterTreasury(dynamicListQueryParameters),
-                    DataCount = await _imasterTreasuryService.CountMasterTreasury(dynamicListQueryParameters)
+                    Data = await _imasterTreasuryService.getmasterTreasury(isActive, dynamicListQueryParameters),
+                    DataCount = await _imasterTreasuryService.CountMasterTreasury(isActive, dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -161,6 +208,41 @@ namespace master.Controllers
             {
                 await _imasterTreasuryService.deleteStudent(id);
                 return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("RestoreMasterTreasury")]
+        public async Task<IActionResult> restoreMasterTreasury(short id)
+        {
+            try
+            {
+                await _imasterTreasuryService.restoreMasterTreasury(id);
+                return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpPost("CountMasterTreasury")]
+        public async Task<IActionResult> CountMasterTreasury([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
+        {
+            try
+            {
+                var DataCount = await _imasterTreasuryService.CountMasterTreasury(isActive, dynamicListQueryParameters);
+                return Ok(DataCount);
             }
             catch (ArgumentException ex)
             {

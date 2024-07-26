@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 namespace master.DAL.Entity;
 
 [Table("major_head", Schema = "master")]
-[Index("Code", Name = "UK_major_head", IsUnique = true)]
+[Index("Code", Name = "UK_major_head1", IsUnique = true)]
 public partial class MajorHead
 {
     [Key]
     [Column("id")]
-    public short Id { get; set; }
+    public int Id { get; set; }
 
     [Column("code")]
     [StringLength(4)]
@@ -21,6 +21,9 @@ public partial class MajorHead
     [Column("name")]
     [StringLength(150)]
     public string Name { get; set; } = null!;
+
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
 
     public virtual ICollection<DemandMajorMapping> DemandMajorMappings { get; set; } = new List<DemandMajorMapping>();
 

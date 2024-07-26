@@ -2,6 +2,7 @@
 using master.BAL.IServices;
 using master.DAL.Entity;
 using master.DAL.IRepository;
+using master.DAL.Repository;
 using master.Dto;
 using master.Models;
 using System.Linq.Expressions;
@@ -10,18 +11,20 @@ namespace master.BAL.Services
 {
     public class masterMinorHeadService : ImasterMinorHeadService
     {
+        ImastersubmajorheadRepository _mastersubmajorheadRepository;
         ImasterMinorHeadRepository _masterMinorHeadRepository;
         IMapper _mapper;
-        public masterMinorHeadService(IMapper mapper, ImasterMinorHeadRepository masterMinorHeadRepository)
+        public masterMinorHeadService(IMapper mapper, ImasterMinorHeadRepository masterMinorHeadRepository,ImastersubmajorheadRepository mastersubmajorheadRepository)
         {
             _mapper = mapper;
             _masterMinorHeadRepository = masterMinorHeadRepository;
-        }
-        public async Task<IEnumerable<masterMinorHeadDto>> getmasterMinorHead(DynamicListQueryParameters dynamicListQueryParameters)
+            _mastersubmajorheadRepository = mastersubmajorheadRepository;
+        }   
+        public async Task<IEnumerable<masterMinorHeadDto>> getmasterMinorHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "DESC";
+            string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-            IEnumerable<masterMinorHeadDto> masterminor = await _masterMinorHeadRepository.GetSelectedColumnByConditionAsync(entity => new masterMinorHeadDto
+            IEnumerable<masterMinorHeadDto> masterminor = await _masterMinorHeadRepository.GetSelectedColumnByConditionAsync(entity => entity.IsActive == isActive, entity => new masterMinorHeadDto
             {
                 Id = entity.Id,
                 Code = entity.Code,
@@ -38,36 +41,35 @@ namespace master.BAL.Services
             return masterminor;
 
         }
-        /*public async Task<List<MinorHead>> getMinorHead()
+
+       public async Task<IEnumerable<SubMajorHeadToMinorHeadDTO>> getSubMajorHeadCode()
         {
-            try
+            IEnumerable<SubMajorHeadToMinorHeadDTO> StudentFormSajalResult = await _mastersubmajorheadRepository.GetSelectedColumnAsync(entity => new SubMajorHeadToMinorHeadDTO
             {
-                return (await _masterMinorHeadRepository.get()).ToList();
-            }
-            catch
-            {
-                throw;
-            }
-        }*/
+                Id= entity.Id,
+                Code = entity.Code,
+                Name = entity.Name
+            });
+            return StudentFormSajalResult;
+        }
         public async Task<int> addMinorHead(masterMinorHeadModel s)
         {
             MinorHead? newMinorHead = new MinorHead();
             newMinorHead = _mapper.Map<MinorHead>(s);
+            newMinorHead.Id = int.Parse(s.SubMajorId.ToString() + s.Code);
+            int numberOfRow = await _masterMinorHeadRepository.CountWithConditionAsync(x => x.Id == newMinorHead.Id);
+            if (numberOfRow > 0)
+            {
+                return 0;
+            }
             _masterMinorHeadRepository.add(newMinorHead);
             _masterMinorHeadRepository.saveChangesManage();
             return newMinorHead.Id;
 
         }
-        public async Task<bool> updateMinorHead(short id, masterMinorHeadModel s)
+        public async Task<bool> updateMinorHead(int id, masterMinorHeadModel s)
         {
             var updatedMinorHead = await _masterMinorHeadRepository.GetByIdAsync(id);
-
-            //repository.Detach(updatedstudent);
-            //updatedstudent.Id = id;
-            //0updatedstudent = _mapper.Map<StudentFormSajal>(s);
-            /*updatedstudent = _mapper.Map(s, updatedstudent);*/
-            //updatedstudent.Id = id;
-            /*updatedstudent.CreatedAt = DateTime.Now;*/
 
             updatedMinorHead.Code = s.Code;
             updatedMinorHead.Name = s.Name;
@@ -79,14 +81,40 @@ namespace master.BAL.Services
 
             return true;
         }
+        /*      public async Task<bool> deleteMinorHead(int id)
+              {
+                  var toDeleteMinorHead = await _masterMinorHeadRepository.GetByIdAsync(id);
+                  if (toDeleteMinorHead != null)
+                  {
+                      _masterMinorHeadRepository.delete(toDeleteMinorHead);
+                      await _masterMinorHeadRepository.saveChangesAsync();
+                  }
+                  return true;
+              }*/
+
         public async Task<bool> deleteMinorHead(int id)
         {
-            var toDeleteMinorHead = await _masterMinorHeadRepository.GetByIdAsync(id);
-            if (toDeleteMinorHead != null)
-            {
-                _masterMinorHeadRepository.delete(toDeleteMinorHead);
-                await _masterMinorHeadRepository.saveChangesAsync();
-            }
+            var toDeleteStudent = await _masterMinorHeadRepository.GetByIdAsync(id);
+
+            toDeleteStudent.IsActive = false;
+
+            _masterMinorHeadRepository.update(toDeleteStudent);
+            _masterMinorHeadRepository.saveChangesManage();
+
+         
+            return true;
+        }
+
+        public async Task<bool> restoreMasterMinorHead(int id)
+        {
+            var toRestoreStudent = await _masterMinorHeadRepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _masterMinorHeadRepository.update(toRestoreStudent);
+            _masterMinorHeadRepository.saveChangesManage();
+
+      
             return true;
         }
         public async Task<MinorHead> getMinorHeadById(int id)
@@ -103,15 +131,12 @@ namespace master.BAL.Services
 
         }*/
 
-        public async Task<int> CountMasterMinorHead(DynamicListQueryParameters dynamicListQueryParameters)
+  
+        public async Task<int> CountMasterMinorHead(bool IsActive,DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<MinorHead, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterMinorHeadRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            return _masterMinorHeadRepository.CountWithCondition(entity=> entity.IsActive == IsActive, dynamicListQueryParameters.filterParameters);
         }
 
-        public Task<bool> updateMinorHead(int id, masterMinorHeadModel s)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

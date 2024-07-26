@@ -1,6 +1,7 @@
 ﻿using master.DAL.Entity;
 using master.Dto;
 using master.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace master.BAL.IServices
 {
@@ -9,9 +10,10 @@ namespace master.BAL.IServices
         Task<int> addStudent(masterTreasuryModel s);
         Task<bool> updateStudent(short id, masterTreasuryModel s);
         Task<bool> deleteStudent(short TreasuryId);
-        Task<Treasury> getStudentById(short id);
-        Task<IEnumerable<masterTresuryDTOs>> getmasterTreasury(DynamicListQueryParameters dynamicListQueryParameters);
-        //int CountWithCondition(List<FilterParameter> dynamicFilters);
-        Task<int> CountMasterTreasury(DynamicListQueryParameters dynamicListQueryParameters);
+        Task<bool> restoreMasterTreasury(short TreasuryId);
+        Task<masterTresuryDTOs> getStudentById(short id);
+        Task<IEnumerable<masterTresuryDTOs>> getmasterTreasury(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);   
+        Task<int> CountMasterTreasury([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
+       
     }
 }

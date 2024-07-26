@@ -24,6 +24,9 @@ public partial class MinorHead
     [Column("sub_major_id")]
     public int? SubMajorId { get; set; }
 
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
+
     [InverseProperty("MinorHead")]
     public virtual ICollection<SchemeHead> SchemeHeads { get; set; } = new List<SchemeHead>();
 

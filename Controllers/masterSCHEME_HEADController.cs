@@ -14,10 +14,12 @@ namespace master.Controllers
     public class masterSCHEME_HEADController : ControllerBase
     {
         ImasterSCHEME_HEADService _imasterSCHEMEHEADService;
+        ImasterMinorHeadService _imasterMinorHeadService;
 
-        public masterSCHEME_HEADController(ImasterSCHEME_HEADService imasterSCHEMEHEADService)
+        public masterSCHEME_HEADController(ImasterSCHEME_HEADService imasterSCHEMEHEADService, ImasterMinorHeadService imasterMinorHeadService)
         {
             _imasterSCHEMEHEADService = imasterSCHEMEHEADService;
+            _imasterMinorHeadService = imasterMinorHeadService;
         }
 
 
@@ -36,7 +38,7 @@ namespace master.Controllers
          }*/
 
         [HttpPost("GetMasterSCHEME_HEAD")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterSCHEME_HEADDto>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterSCHEME_HEADDto>>>>> GetStudent([FromQuery] bool isActive ,DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<masterSCHEME_HEADDto>>> response = new();
             try
@@ -83,8 +85,8 @@ namespace master.Controllers
                     },
 
                 },
-                    Data = await _imasterSCHEMEHEADService.getmasterSCHEME_HEAD(dynamicListQueryParameters),
-                    DataCount = await _imasterSCHEMEHEADService.CountMasterSCHEME_HEAD(dynamicListQueryParameters)
+                    Data = await _imasterSCHEMEHEADService.getmasterSCHEME_HEAD( isActive,dynamicListQueryParameters),
+                    DataCount = await _imasterSCHEMEHEADService.CountMasterSCHEME_HEAD(isActive, dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -96,12 +98,12 @@ namespace master.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetTreasuryCode")]
-        public async Task<IActionResult> GetTreasuryCodes()
+        [HttpGet("GetMasterSCHEME_HEADfromMINORHEADId")]
+        public async Task<IActionResult> getgetSchemeMinorheadfromMINORHEADId()
         {
             try
             {
-                var codes = await _imasterSCHEMEHEADService.getTreasuryCode();
+                var codes = await _imasterSCHEMEHEADService.getSchemeMinorheadfromMINORHEADId();
                 return Ok(codes);
             }
             catch (Exception ex)
@@ -176,6 +178,40 @@ namespace master.Controllers
             {
                 await _imasterSCHEMEHEADService.deleteStudent(id);
                 return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpDelete("RestoreMasterSchemeHead")]
+        public async Task<IActionResult> RestoreMasterDdo(int id)
+        {
+            try
+            {
+                await _imasterSCHEMEHEADService.restoreMasterSchemeHead(id);
+                return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpPost("CountMasterSchemeHead")]
+        public async Task<IActionResult> CountMasterSchemeHead([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
+        {
+            try
+            {
+                var DataCount = await _imasterSCHEMEHEADService.CountMasterSCHEME_HEAD(isActive, dynamicListQueryParameters);
+                return Ok(DataCount);
             }
             catch (ArgumentException ex)
             {

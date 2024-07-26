@@ -22,7 +22,10 @@ public partial class SubMajorHead
     public string? Name { get; set; }
 
     [Column("major_head_id")]
-    public short? MajorHeadId { get; set; }
+    public int? MajorHeadId { get; set; }
+
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
 
     [ForeignKey("MajorHeadId")]
     [InverseProperty("SubMajorHeads")]

@@ -5,6 +5,7 @@ using master.DAL.IRepository;
 using master.DAL.Repository;
 using master.Dto;
 using master.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
 namespace master.BAL.Services
@@ -18,11 +19,11 @@ namespace master.BAL.Services
             _masterDetailHeadRepository = masterDetailHeadRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<masterDetailHeadDto>> getDetailHead(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<masterDetailHeadDto>> getDetailHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
             string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-            IEnumerable<masterDetailHeadDto> StudentFormSajalResult = await _masterDetailHeadRepository.GetSelectedColumnByConditionAsync(entity => new masterDetailHeadDto
+            IEnumerable<masterDetailHeadDto> StudentFormSajalResult = await _masterDetailHeadRepository.GetSelectedColumnByConditionAsync(entity => entity.IsActive == isActive, entity => new masterDetailHeadDto
             {
                 Id = entity.Id,
                 Code = entity.Code,
@@ -87,12 +88,22 @@ namespace master.BAL.Services
         }
         public async Task<bool> deleteDetailHead(short id)
         {
+
             var toDeleteStudent = await _masterDetailHeadRepository.GetByIdAsync(id);
-            if (toDeleteStudent != null)
-            {
-                _masterDetailHeadRepository.delete(toDeleteStudent);
-                await _masterDetailHeadRepository.saveChangesAsync();
-            }
+
+            toDeleteStudent.IsActive = false;
+            _masterDetailHeadRepository.update(toDeleteStudent);
+            await _masterDetailHeadRepository.saveChangesAsync();
+            return true;
+        }
+        public async Task<bool> restoreMasterDetailHead(short id)
+        {
+            var toRestoreStudent = await _masterDetailHeadRepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _masterDetailHeadRepository.update(toRestoreStudent);
+            _masterDetailHeadRepository.saveChangesManage();
             return true;
         }
         public async Task<masterDetailHeadDto> getDetailHeadById(short id)
@@ -120,10 +131,9 @@ namespace master.BAL.Services
 
         }*/
 
-        public async Task<int> CountDetailHead(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountDetailHead([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<DetailHead, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterDetailHeadRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            return _masterDetailHeadRepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);
         }
     }
 }

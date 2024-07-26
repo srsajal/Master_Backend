@@ -19,4 +19,7 @@ public partial class SchemeTypeMst
 
     [Column("description", TypeName = "character varying")]
     public string? Description { get; set; }
+
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
 }

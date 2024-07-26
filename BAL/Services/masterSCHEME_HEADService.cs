@@ -14,19 +14,21 @@ namespace master.BAL.Services
 
         ImasterSCHEME_HEADRepository _masterSCHEME_HEADRepository;
         IMapper _mapper;
+        ImasterMinorHeadRepository _masterMinorHeadRepository;
 
-        public masterSCHEME_HEADService(IMapper mapper, ImasterSCHEME_HEADRepository masterSCHEME_HEADRepository)
+        public masterSCHEME_HEADService(IMapper mapper, ImasterSCHEME_HEADRepository masterSCHEME_HEADRepository, ImasterMinorHeadRepository masterMinorHeadRepository)
         {
             _mapper = mapper;
             _masterSCHEME_HEADRepository = masterSCHEME_HEADRepository;
+       _masterMinorHeadRepository = masterMinorHeadRepository;
         }
 
-        public async Task<IEnumerable<masterSCHEME_HEADDto>> getmasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<IEnumerable<masterSCHEME_HEADDto>> getmasterSCHEME_HEAD(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
            
                 string sortOrder = dynamicListQueryParameters.sortParameters?.Order.ToUpper() ?? "ASC";
                 string sortField = dynamicListQueryParameters.sortParameters?.Field ?? "Id";
-                IEnumerable<masterSCHEME_HEADDto> Result = await _masterSCHEME_HEADRepository.GetSelectedColumnByConditionAsync(entity => new masterSCHEME_HEADDto
+                IEnumerable<masterSCHEME_HEADDto> Result = await _masterSCHEME_HEADRepository.GetSelectedColumnByConditionAsync(entity => entity.IsActive == isActive, entity => new masterSCHEME_HEADDto
                 {
                     Id = entity.Id,
 
@@ -45,14 +47,15 @@ namespace master.BAL.Services
                 return Result;
           
         }
-        public async Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode()
+        public async Task<IEnumerable<SchemeMinorheadfromMINORHEADIdDTO>> getSchemeMinorheadfromMINORHEADId()
         {
-            IEnumerable<DdoCodeTresuryDTO> StudentFormSajalResult = await _masterSCHEME_HEADRepository.GetSelectedColumnAsync(entity => new DdoCodeTresuryDTO
-            {
+            IEnumerable<SchemeMinorheadfromMINORHEADIdDTO> Result = await _masterMinorHeadRepository.GetSelectedColumnAsync(entity => new SchemeMinorheadfromMINORHEADIdDTO
+            { 
+                Id =entity.Id,
                 Code = entity.Code,
                 Name = entity.Name
             });
-            return StudentFormSajalResult;
+            return Result;
         }
         public async Task<int> addStudent(masterSCHEME_HEADModel s)
         {
@@ -91,11 +94,19 @@ namespace master.BAL.Services
         public async Task<bool> deleteStudent(int id)
         {
             var toDeleteStudent = await _masterSCHEME_HEADRepository.GetByIdAsync(id);
-            if (toDeleteStudent != null)
-            {
-                _masterSCHEME_HEADRepository.delete(toDeleteStudent);
+            toDeleteStudent.IsActive = false;
+                _masterSCHEME_HEADRepository.update(toDeleteStudent);
                 await _masterSCHEME_HEADRepository.saveChangesAsync();
-            }
+            return true;
+        }
+        public async Task<bool> restoreMasterSchemeHead(int id)
+        {
+            var toRestoreStudent = await _masterSCHEME_HEADRepository.GetByIdAsync(id);
+
+            toRestoreStudent.IsActive = true;
+
+            _masterSCHEME_HEADRepository.update(toRestoreStudent);
+            _masterSCHEME_HEADRepository.saveChangesManage();
             return true;
         }
         public async Task<SchemeHead> getStudentById(int id)
@@ -112,10 +123,9 @@ namespace master.BAL.Services
 
         }*/
 
-        public async Task<int> CountMasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<int> CountMasterSCHEME_HEAD(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
-            Expression<Func<SchemeHead, bool>> condition = d => true; // Default condition if no specific condition is required
-            return _masterSCHEME_HEADRepository.CountWithCondition(condition, dynamicListQueryParameters.filterParameters);
+            return _masterSCHEME_HEADRepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);
         }
     }
 }

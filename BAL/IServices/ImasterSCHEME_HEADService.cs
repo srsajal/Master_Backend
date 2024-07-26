@@ -9,11 +9,12 @@ namespace master.BAL.IServices
         Task<int> addStudent(masterSCHEME_HEADModel s);
         Task<bool> updateStudent(int id, masterSCHEME_HEADModel s);
         Task<bool> deleteStudent(int id);
+        Task<bool> restoreMasterSchemeHead(int studentId);
         Task<SchemeHead> getStudentById(int id);
-        Task<IEnumerable<masterSCHEME_HEADDto>> getmasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters);
+        Task<IEnumerable<masterSCHEME_HEADDto>> getmasterSCHEME_HEAD(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
 
-        Task<IEnumerable<DdoCodeTresuryDTO>> getTreasuryCode();
+        Task<IEnumerable<SchemeMinorheadfromMINORHEADIdDTO>> getSchemeMinorheadfromMINORHEADId();
         //int CountWithCondition(List<FilterParameter> dynamicFilters);
-        Task<int> CountMasterSCHEME_HEAD(DynamicListQueryParameters dynamicListQueryParameters);
+        Task<int> CountMasterSCHEME_HEAD(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using master.BAL.IServices;
+using master.BAL.Services;
 using master.Dto;
 using master.Models;
 using masterDDO.Enums;
@@ -13,12 +14,14 @@ namespace master.Controllers
     public class MasterDepartmentController : ControllerBase
     {
         ImasterDepartmentService _imasterDepartmentService;
+        private object isActive;
+
         public MasterDepartmentController(ImasterDepartmentService imasterDepartmentService)
         {
             _imasterDepartmentService = imasterDepartmentService;
         }
         [HttpPost("GetMasterDepartment")]
-        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterDepartmentDto>>>>> GetStudent(DynamicListQueryParameters dynamicListQueryParameters)
+        public async Task<ActionResult<ServiceResponse<DynamicListResult<IEnumerable<masterDepartmentDto>>>>> GetDepartment([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             ServiceResponse<DynamicListResult<IEnumerable<masterDepartmentDto>>> response = new();
             try
@@ -100,8 +103,8 @@ namespace master.Controllers
                         IsSortable=true,
                     }
                 },
-                    Data = await _imasterDepartmentService.getmasterDepartment(dynamicListQueryParameters),
-                    DataCount = await _imasterDepartmentService.CountMasterDepartment(dynamicListQueryParameters)
+                    Data = await _imasterDepartmentService.getmasterDepartment(isActive,dynamicListQueryParameters),
+                    DataCount = await _imasterDepartmentService.CountMasterDepartment(isActive, dynamicListQueryParameters)
                 };
                 response.result = result;
             }
@@ -127,24 +130,18 @@ namespace master.Controllers
             }
 
         }
-        /*[HttpGet("GetStudentByName")]
-        public async Task<IActionResult> GetStudentByName(string name)
-        {
-            try
-            {
-                List<Ddo> students = await _imasterDDOService.getStudentsByName(name);
-                return Ok(students);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }*/
+        
         [HttpPost("AddMasterDepartment")]
         public async Task<IActionResult> AddDepartment(masterDepartmentModel s)
         {
             try
             {
+                bool exists = await _imasterDepartmentService.masterDepartmentExistsByDemandCode(s.DemandCode);
+
+                if (exists)
+                {
+                    return BadRequest("Error: The provided code already exists in the database.");
+                }
                 int id = await _imasterDepartmentService.addDepartment(s);
                 return Ok(id);
             }
@@ -153,6 +150,28 @@ namespace master.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("CheckMasterDepartmentDemandCode/{DemandCode}")]
+        public async Task<IActionResult> CheckMasterDepartmentCode(string DemandCode)
+        {
+            try
+            {
+                // Check if the Code exists
+                bool codeExists = await _imasterDepartmentService.masterDepartmentExistsByDemandCode(DemandCode);
+
+                if (codeExists)
+                {
+                    return Ok(true);
+                }
+
+                return Ok(false);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         [HttpPut("UpdateMasterDepartment")]
         public async Task<IActionResult> UpdateDepartment(short id, masterDepartmentModel s)
         {
@@ -178,6 +197,40 @@ namespace master.Controllers
             {
                 await _imasterDepartmentService.deleteDepartment(id);
                 return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpDelete("RestoreMasterDepartment")]
+        public async Task<IActionResult> RestoreMasterDdo(short id)
+        {
+            try
+            {
+                await _imasterDepartmentService.restoreMasterDepartment(id);
+                return StatusCode(200);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpPost("CountMasterDepartment")]
+        public async Task<IActionResult> CountMasterDepartment([FromQuery] bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
+        {
+            try
+            {
+                var DataCount = await _imasterDepartmentService.CountMasterDepartment(isActive, dynamicListQueryParameters);
+                return Ok(DataCount);
             }
             catch (ArgumentException ex)
             {

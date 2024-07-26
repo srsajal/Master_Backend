@@ -8,10 +8,11 @@ namespace master.BAL.IServices
         Task<int> addSubDetailHead(masterSubDetailHeadModel s);
         Task<bool> updateSubDetailHead(short id, masterSubDetailHeadModel s);
         Task<bool> deleteSubDetailHead(short studentId);
+        Task<bool> restoreMasterSubDetailHead(short id);
         Task<masterSubDetailHeadDto> getSubDetailHeadById(short id);
-        Task<IEnumerable<masterSubDetailHeadDto>> getSubDetailHead(DynamicListQueryParameters dynamicListQueryParameters);
-        Task<IEnumerable<DetailToSubDetailCode>> getDetailCode();
+        Task<IEnumerable<masterSubDetailHeadDto>> getSubDetailHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
+        Task<IEnumerable<DetailToSubDetailCodeDTO>> getDetailCode();
         //int CountWithCondition(List<FilterParameter> dynamicFilters);
-        Task<int> CountSubDetailHead(DynamicListQueryParameters dynamicListQueryParameters);
+        Task<int> CountSubDetailHead(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
     }
 }

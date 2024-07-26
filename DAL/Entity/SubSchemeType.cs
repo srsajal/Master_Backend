@@ -18,4 +18,7 @@ public partial class SubSchemeType
 
     [Column("description", TypeName = "character varying")]
     public string? Description { get; set; }
+
+    [Column("is_active")]
+    public bool? IsActive { get; set; }
 }
