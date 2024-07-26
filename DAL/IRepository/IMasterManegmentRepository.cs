@@ -7,10 +7,6 @@ namespace MasterManegmentSystem.DAL.IRepository
 {
     public interface IMasterManegmentRepository : IRepository<MajorHead>
     {
-        void Add<T>(T entity) where T : class;
-        Task SaveChangesAsync();
-        Task<bool> AnyAsync(Func<MajorHead, bool> predicate);
-        Task<IEnumerable<T>> GetAllAsync<T>() where T : class;
     }
 }
 

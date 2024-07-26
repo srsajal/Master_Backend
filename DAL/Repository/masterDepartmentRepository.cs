@@ -12,24 +12,5 @@ namespace master.DAL.Repository
         {
             _dContext = context;
         }
-        public void Add<T>(T entity) where T : class
-        {
-            _dContext.Set<T>().Add(entity);
-        }
-
-        public async Task SaveChangesAsync()
-        {
-            await _dContext.SaveChangesAsync();
-        }
-
-        public async Task<bool> AnyAsync(Func<Department, bool> predicate)
-        {
-            return await Task.FromResult(_dContext.Departments.Any(predicate));
-        }
-
-        public async Task<IEnumerable<T>> GetAllAsync<T>() where T : class
-        {
-            return await _dContext.Set<T>().ToListAsync();
-        }
     }
 }

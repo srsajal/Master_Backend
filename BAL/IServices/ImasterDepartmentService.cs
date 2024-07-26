@@ -13,10 +13,7 @@ namespace master.BAL.IServices
         Task<bool> restoreMasterDepartment(short studentId);
         Task<Department> getDepartmentById(short id);
         Task<IEnumerable<masterDepartmentDto>> getmasterDepartment(bool isActive,DynamicListQueryParameters dynamicListQueryParameters);
-        //int CountWithCondition(List<FilterParameter> dynamicFilters);
         Task<int> CountMasterDepartment(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
         Task<bool> masterDepartmentExistsByDemandCode(string DemandCode);
-        Task<bool> masterDepartmentExistsById(short id);
-        // Task<IEnumerable<masterDepartmentDto>> getmasterDepartment(bool isActive, DynamicListQueryParameters dynamicListQueryParameters);
     }
 }

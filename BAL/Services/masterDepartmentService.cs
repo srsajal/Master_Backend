@@ -58,23 +58,16 @@ namespace master.BAL.Services
 
         public async Task<bool> masterDepartmentExistsByDemandCode(string DemandCode)
         {
-            return await _masterDepartmentRepository.AnyAsync(m => m.DemandCode == DemandCode);
-        }
-
-        public async Task<bool> masterDepartmentExistsById(short id)
-        {
-            return await _masterDepartmentRepository.AnyAsync(m => m.Id == id);
+            int numberOfRow = await _masterDepartmentRepository.CountWithConditionAsync(m => m.DemandCode == DemandCode);
+            if (numberOfRow > 0)
+            {
+                return true;
+            }
+            return false;
         }
         public async Task<bool> updateDepartment(short id, masterDepartmentModel s)
         {
             var updatedDepartment = await _masterDepartmentRepository.GetByIdAsync(id);
-
-            //repository.Detach(updatedstudent);
-            //updatedstudent.Id = id;
-            //0updatedstudent = _mapper.Map<StudentFormSajal>(s);
-            /*updatedstudent = _mapper.Map(s, updatedstudent);*/
-            //updatedstudent.Id = id;
-            /*updatedstudent.CreatedAt = DateTime.Now;*/
 
             updatedDepartment.Code = s.Code;
             updatedDepartment.Name = s.Name;
@@ -113,16 +106,6 @@ namespace master.BAL.Services
         {
             return (await _masterDepartmentRepository.GetByIdAsync(id));
         }
-        /*public async Task<List<Ddo>> getStudentsByName(String name)
-        {
-            return (await _masterDDORepository.GetStudentByName(name));
-        }*/
-
-        /*public async int CountWithCondition(List<FilterParameter> dynamicFilters)
-        {
-
-        }*/
-
         public async Task<int> CountMasterDepartment(bool isActive, DynamicListQueryParameters dynamicListQueryParameters)
         {
             return _masterDepartmentRepository.CountWithCondition(entity => entity.IsActive == isActive, dynamicListQueryParameters.filterParameters);

@@ -101,7 +101,14 @@ namespace master.BAL.Services
         public async Task<int> addStudent(masterDDOModel s)
         {
             Ddo? newDdo = new Ddo();
-            newDdo = _mapper.Map<Ddo>(s);
+            //newDdo = _mapper.Map<Ddo>(s);
+            newDdo.TreasuryCode = s.TreasuryCode;
+            newDdo.TreasuryMstId = s.TreasuryMstld;
+            newDdo.Code = s.Code;
+            newDdo.Designation = s.Designation;
+            newDdo.DesignationMstId = s.DesignationMstld;
+            newDdo.Address = s.Address;
+            newDdo.Phone = s.Phone;
             _masterDDORepository.add(newDdo);
             _masterDDORepository.saveChangesManage();
 

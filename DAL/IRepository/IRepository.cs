@@ -35,5 +35,6 @@ namespace master.DAL.IRepository
         Task<ICollection<TResult>> GetSelectedColumnAsync<TResult>(Expression<Func<T, TResult>> selectExpression);
         Task<TResult> GetSelectedIdColumnAsync<TResult, Tkey>(Tkey id,Expression<Func<T, TResult>> selectExpression);
         int CountWithCondition(Expression<Func<T, bool>> condition, List<FilterParameter> dynamicFilters = null);
+        Task<int> CountWithConditionAsync(Expression<Func<T, bool>> condition, List<FilterParameter> dynamicFilters = null);
     }
 }

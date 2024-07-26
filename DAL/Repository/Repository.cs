@@ -160,8 +160,21 @@ namespace master.DAL.Repository
                     query = query.Where(dynimicFilterExpression);
                 }
             }
-            //var result = query.Select(selectExpression).ToListAsync();
             return query.Count(condition);
+        }
+        public async Task<int> CountWithConditionAsync(Expression<Func<T, bool>> condition, List<FilterParameter> dynamicFilters = null)
+        {
+            IQueryable<T> query = this._masterDdoContext.Set<T>();
+
+            if (dynamicFilters != null && dynamicFilters.Any())
+            {
+                foreach (var filter in dynamicFilters)
+                {
+                    var dynimicFilterExpression = ExpressionHelper.GetFilterExpression<T>(filter.Field, filter.Value, filter.Operator);
+                    query = query.Where(dynimicFilterExpression);
+                }
+            }
+            return await query.CountAsync(condition);
         }
     }
 }

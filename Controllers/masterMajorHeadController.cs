@@ -94,7 +94,7 @@ namespace master.Controllers
         }
 
         [HttpGet("CheckMasterMAJORHEADCode/{code}")]
-        public async Task<bool> CheckMasterMAJORHEADCode(string code)
+        public async Task<IActionResult> CheckMasterMAJORHEADCode(string code)
         {
             try
             {
@@ -103,34 +103,16 @@ namespace master.Controllers
 
                 if (codeExists)
                 {
-                    return true;
+                    return Ok(true);
                 }
 
-                return false;
+                return Ok(false);
             }
             catch (Exception ex)
             {
                 throw;
             }
         }
-
-        [HttpGet("GetAllMasterMAJORHEADs")]
-        public async Task<IActionResult> GetAllMasterMAJORHEADs()
-        {
-            try
-            {
-                var masterMajorHeads = await _imasterManagementService.GetAllMasterMAJORHEADs();
-                return Ok(masterMajorHeads);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-    
-
-
-
 
         [HttpPut("UpdateMasterMAJORHEAD")]
         public async Task<IActionResult> UpdateMasterMAJORHEAD(int id, MasterManegmentModel s)

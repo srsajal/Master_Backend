@@ -45,26 +45,20 @@ namespace MasterManegmentSystem.BAL.Services
         {
             MajorHead newMajorHead = _mapper.Map<MajorHead>(model);
             newMajorHead.Id = int.Parse(newMajorHead.Code);
-            _masterManegmentRepository.Add(newMajorHead);
-            await _masterManegmentRepository.SaveChangesAsync();
+            _masterManegmentRepository.add(newMajorHead);
+            await _masterManegmentRepository.saveChangesAsync();
 
             return newMajorHead.Id;
         }
 
         public async Task<bool> MasterMAJORHEADExistsByCode(string code)
         {
-            return await _masterManegmentRepository.AnyAsync(m => m.Code == code);
-        }
-
-        public async Task<bool> MasterMAJORHEADExistsById(int id)
-        {
-            return await _masterManegmentRepository.AnyAsync(m => m.Id == id);
-        }
-
-        public async Task<IEnumerable<MasterManegmentModel>> GetAllMasterMAJORHEADs()
-        {
-            var majorHeads = await _masterManegmentRepository.GetAllAsync<MajorHead>();
-            return _mapper.Map<IEnumerable<MasterManegmentModel>>(majorHeads);
+            int numberOfRow = await _masterManegmentRepository.CountWithConditionAsync(x => x.Code == code);
+            if (numberOfRow>0)
+            {
+                return true;
+            }
+            return false;
         }
         public async Task<bool> UpdateMastermajorhead(int id, MasterManegmentModel model)
         {

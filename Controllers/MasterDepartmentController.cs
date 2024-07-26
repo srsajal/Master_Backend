@@ -152,7 +152,7 @@ namespace master.Controllers
         }
 
         [HttpGet("CheckMasterDepartmentDemandCode/{DemandCode}")]
-        public async Task<bool> CheckMasterDepartmentCode(string DemandCode)
+        public async Task<IActionResult> CheckMasterDepartmentCode(string DemandCode)
         {
             try
             {
@@ -161,10 +161,10 @@ namespace master.Controllers
 
                 if (codeExists)
                 {
-                    return true;
+                    return Ok(true);
                 }
 
-                return false;
+                return Ok(false);
             }
             catch (Exception ex)
             {

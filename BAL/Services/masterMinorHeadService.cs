@@ -57,6 +57,11 @@ namespace master.BAL.Services
             MinorHead? newMinorHead = new MinorHead();
             newMinorHead = _mapper.Map<MinorHead>(s);
             newMinorHead.Id = int.Parse(s.SubMajorId.ToString() + s.Code);
+            int numberOfRow = await _masterMinorHeadRepository.CountWithConditionAsync(x => x.Id == newMinorHead.Id);
+            if (numberOfRow > 0)
+            {
+                return 0;
+            }
             _masterMinorHeadRepository.add(newMinorHead);
             _masterMinorHeadRepository.saveChangesManage();
             return newMinorHead.Id;
@@ -65,13 +70,6 @@ namespace master.BAL.Services
         public async Task<bool> updateMinorHead(int id, masterMinorHeadModel s)
         {
             var updatedMinorHead = await _masterMinorHeadRepository.GetByIdAsync(id);
-
-            //repository.Detach(updatedstudent);
-            //updatedstudent.Id = id;
-            //0updatedstudent = _mapper.Map<StudentFormSajal>(s);
-            /*updatedstudent = _mapper.Map(s, updatedstudent);*/
-            //updatedstudent.Id = id;
-            /*updatedstudent.CreatedAt = DateTime.Now;*/
 
             updatedMinorHead.Code = s.Code;
             updatedMinorHead.Name = s.Name;

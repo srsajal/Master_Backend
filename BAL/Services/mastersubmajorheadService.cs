@@ -63,6 +63,11 @@ namespace master.BAL.Services
         {
             SubMajorHead newSubMajorHead = _mapper.Map<SubMajorHead>(model);
             newSubMajorHead.Id = int.Parse(model.MajorHeadId.ToString() + model.Code);
+            int numberOfRow = await _masterManegmentRepository.CountWithConditionAsync(x => x.Id == newSubMajorHead.Id);
+            if (numberOfRow > 0)
+            {
+                return 0;
+            }
             _mastersubmajorheadRepository.add(newSubMajorHead);
             _mastersubmajorheadRepository.saveChangesAsync();
 
