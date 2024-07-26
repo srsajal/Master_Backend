@@ -65,8 +65,8 @@ namespace MasterManegmentSystem.BAL.Services
                 MajorHead updatedStudent = await _masterManegmentRepository.GetByIdAsync(id);
 
                 if (updatedStudent == null) return false;
-            updatedStudent.Code = model.Code;
-            updatedStudent.Name = model.Name;   
+                updatedStudent.Code = model.Code;
+                updatedStudent.Name = model.Name;   
 
 
                 _masterManegmentRepository.update(updatedStudent);
