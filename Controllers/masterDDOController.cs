@@ -65,6 +65,7 @@ namespace master.Controllers
                         FieldName ="code",
                         FilterField ="Code",
                         IsFilterable=true,
+                        Collapsible=true,
                         IsSortable=true,
                     },
                     new ListHeader
@@ -73,6 +74,7 @@ namespace master.Controllers
                         DataType="text",
                         FieldName ="designation",
                         FilterField ="Designation",
+                        Collapsible=true,
                         IsFilterable=true,
                         IsSortable=true,
                     },
@@ -82,6 +84,7 @@ namespace master.Controllers
                         DataType="text",
                         FieldName ="address",
                         FilterField ="Address",
+                        Collapsible = true,
                         IsFilterable=true,
                         IsSortable=true,
                     },
